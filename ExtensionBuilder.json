@@ -1,0 +1,37 @@
+{
+    "modules": [],
+    "properties": {
+        "backendModules": [],
+        "description": "OpenEMM Newsletter",
+        "emConf": {
+            "category": "module",
+            "custom_category": "",
+            "dependsOn": "typo3 => 6.2\n",
+            "disableLocalization": false,
+            "disableVersioning": false,
+            "sourceLanguage": "en",
+            "state": "alpha",
+            "targetVersion": "6.2",
+            "version": "0.0.1"
+        },
+        "extensionKey": "openemm",
+        "name": "OpenEMM ",
+        "originalExtensionKey": "",
+        "persons": [
+            {
+                "company": "IDEAL GmbH",
+                "email": "technik@idealit.com",
+                "name": "Markus Pircher",
+                "role": "Developer"
+            }
+        ],
+        "plugins": [],
+        "vendorName": "Ideal"
+    },
+    "wires": [],
+    "log": {
+        "last_modified": "2015-02-12 04:53",
+        "extension_builder_version": "6.2.0",
+        "be_user": " (1)"
+    }
+}

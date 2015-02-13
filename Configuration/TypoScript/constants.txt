@@ -1,0 +1,43 @@
+# customsubcategory=webservice=Webservice
+plugin.tx_openemm {
+	view {
+		# cat=plugin.tx_openemm/file; type=string; label=Path to template root (FE)
+		templateRootPath = EXT:openemm/Resources/Private/Templates/
+		# cat=plugin.tx_openemm/file; type=string; label=Path to template partials (FE)
+		partialRootPath = EXT:openemm/Resources/Private/Partials/
+		# cat=plugin.tx_openemm/file; type=string; label=Path to template layouts (FE)
+		layoutRootPath = EXT:openemm/Resources/Private/Layouts/
+	}
+	persistence {
+		# cat=plugin.tx_openemm//a; type=string; label=Default storage PID
+		storagePid =
+	}
+        settings {
+                webservice {
+                    # cat=plugin.tx_openemm/webservice; type=string; label=Path/URL to WSDL
+                    wsdl = 
+                    # cat=plugin.tx_openemm/webservice; type=string; label=Username
+                    username = 
+                    # cat=plugin.tx_openemm/webservice; type=string; label=Password
+                    password =
+                    # cat=plugin.tx_openemm/webservice; type=string; label=nonce
+                    nonce =                    
+                        
+                }
+        }
+}
+
+module.tx_openemm {
+	view {
+		# cat=module.tx_openemm/file; type=string; label=Path to template root (BE)
+		templateRootPath = EXT:openemm/Resources/Private/Backend/Templates/
+		# cat=module.tx_openemm/file; type=string; label=Path to template partials (BE)
+		partialRootPath = EXT:openemm/Resources/Private/Backend/Partials/
+		# cat=module.tx_openemm/file; type=string; label=Path to template layouts (BE)
+		layoutRootPath = EXT:openemm/Resources/Private/Backend/Layouts/
+	}
+	persistence {
+		# cat=module.tx_openemm//a; type=string; label=Default storage PID
+		storagePid =
+	}
+}

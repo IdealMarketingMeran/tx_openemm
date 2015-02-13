@@ -1,0 +1,74 @@
+plugin.tx_openemm {
+    view {
+        templateRootPath = {$plugin.tx_openemm.view.templateRootPath}
+	partialRootPath = {$plugin.tx_openemm.view.partialRootPath}
+	layoutRootPath = {$plugin.tx_openemm.view.layoutRootPath}
+    }
+    persistence {
+        storagePid = {$plugin.tx_openemm.persistence.storagePid}
+    }
+    features {
+		# uncomment the following line to enable the new Property Mapper.
+		# rewrittenPropertyMapper = 1
+    }
+    settings {
+        webservice {
+            wsdl =  {$plugin.tx_openemm.settings.webservice.wsdl}
+            username =  {$plugin.tx_openemm.settings.webservice.username}
+            password =  {$plugin.tx_openemm.settings.webservice.password}
+            soapOption {
+                        
+            }
+        }
+    }
+}
+
+plugin.tx_openemm._CSS_DEFAULT_STYLE (
+	textarea.f3-form-error {
+		background-color:#FF9F9F;
+		border: 1px #FF0000 solid;
+	}
+
+	input.f3-form-error {
+		background-color:#FF9F9F;
+		border: 1px #FF0000 solid;
+	}
+
+	.tx-event-booking table {
+		border-collapse:separate;
+		border-spacing:10px;
+	}
+
+	.tx-event-booking table th {
+		font-weight:bold;
+	}
+
+	.tx-event-booking table td {
+		vertical-align:top;
+	}
+
+	.typo3-messages .message-error {
+		/*color:red;*/
+	}
+
+	.typo3-messages .message-ok {
+		/*color:green;*/
+	}
+
+)
+
+ # Module configuration
+module.tx_openemm {
+	persistence {
+		storagePid = {$module.tx_openemm.persistence.storagePid}
+	}
+	view {
+		templateRootPath = {$module.tx_openemm.view.templateRootPath}
+		partialRootPath = {$module.tx_openemm.view.partialRootPath}
+		layoutRootPath = {$module.tx_openemm.view.layoutRootPath}
+	}
+}
+
+page.includeJS {
+    //eventBooking = EXT:tx_openemm/Resources/Public/Js/validate.js
+}
