@@ -34,7 +34,8 @@ namespace Ideal\Openemm\Services\Api\Mapper;
  */
 abstract class SubscriberMapper {
     
-    public static function Map($subscriber) {
-        
+    public static function MapFromSoap($subscriber) {
+        $subscriberModel = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Ideal\\Openemm\\Model\\SubscriberApiModel');
+        //$subscriberModel->custommerId = $subscriber->
     }
 }

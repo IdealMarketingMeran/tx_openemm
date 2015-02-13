@@ -1,6 +1,6 @@
 <?php
 
-namespace Ideal\Api\OpenEMM\Model;
+namespace Ideal\Openemm\Model;
 
 /* * *************************************************************
  *
@@ -32,7 +32,7 @@ namespace Ideal\Api\OpenEMM\Model;
  *
  * @author Markus Pircher
  */
-class SubscriberModel  {
+class SubscriberApiModel  {
     public $customerID;
     public $parameter;
 }
