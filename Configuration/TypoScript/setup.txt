@@ -20,6 +20,10 @@ plugin.tx_openemm {
                         
             }
         }
+        fieldTypes {
+            email = textfield
+            
+        }
     }
 }
 

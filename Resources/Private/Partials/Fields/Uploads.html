@@ -1,0 +1,28 @@
+<div class="form-group{field.errorClassWrap}" id="field-{field.property}-wrap">
+    <label for="{field.property}" class="col-sm-2 control-label">{field.name}
+        <f:if condition="{field.required}">
+            <f:then>
+                <span class="required">*</span>
+            </f:then>
+        </f:if>
+    </label>
+    <div class="col-sm-10">
+        <f:for each="{field.uploads}" as="upload" iteration="iterator">
+            <f:if condition="{field.required}">
+                <f:then>
+                    <f:if condition="{iterator.isFirst}">
+                        <f:then>
+                            <f:form.upload name="{field.property}[{iterator.index}]" class="required{field.errorClassInput}" id="field-{field.property}" />
+                        </f:then>
+                        <f:else>
+                            <f:form.upload name="{field.property}[{iterator.index}]" id="field-{field.property}" />
+                        </f:else>
+                    </f:if>
+                </f:then>
+                <f:else>
+                    <f:form.upload name="{field.property}[{iterator.index}]" id="field-{field.property}" />
+                </f:else>
+            </f:if>
+        </f:for>
+    </div>
+</div>

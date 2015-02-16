@@ -126,7 +126,7 @@ class OpenEMMService {
      * @param string $remark
      * @param int $exitMailingID
      */
-    public function SetSubscriberBinding($customerID, $mailinglistID, $mediatype = 0, $status = 1, $userType = "W", $remark = "tx_openemm", $exitMailingID = 0) {
+    public function SetSubscriberBinding($customerID, $mailinglistID, $mediatype = 0, $status = 5, $userType = "W", $remark = "tx_openemm", $exitMailingID = 0) {
         $request = array(
             'customerID' => $customerID,
             'mailinglistID' => $mailinglistID,

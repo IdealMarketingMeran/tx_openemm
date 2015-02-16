@@ -123,7 +123,7 @@ class WsseSoapClient extends \SoapClient {
         $this->appendWsseSecurityElements($xml);
         $request = $xml->saveXML();
 
-        echo "REQUEST" . $request;
+        //echo "REQUEST" . $request;
         return parent::__doRequest($request, $location, $action, $version, $one_way);
     }
 

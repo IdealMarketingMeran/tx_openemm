@@ -1,0 +1,69 @@
+<f:layout name="Default" />
+<f:section name="main">
+    <div id="message-container">
+        <f:flashMessages renderMode="div" />
+    </div>
+    <f:debug>{debug}</f:debug>
+    <f:if condition="{step}">
+        <f:switch expression="{step}">
+            <f:case value="1">
+                <f:comment><f:render partial="FormErrors" arguments="{object:participant}" /></f:comment>
+                <f:form controller="Subscriber" name="subscriber" object="{participant}" class="form-horizontal" id="subscriber-form-step1">
+                    <f:if condition="{fields}">
+                        <f:then>
+                            <f:for each="{fields}" as="field">
+                                <f:switch expression="{field.type}">
+                                    <f:case value="textfield">
+                                        <f:render partial="Fields/Textfield" arguments="{field:field}" />
+                                    </f:case>
+                                    <f:case value="textarea">
+                                        <f:render partial="Fields/Textarea" arguments="{field:field}" />
+                                    </f:case>
+                                    <f:case value="checkbox">
+                                        <f:render partial="Fields/Checkbox" arguments="{field:field}" />
+                                    </f:case>
+                                    <f:case value="select">
+                                        <f:render partial="Fields/Select" arguments="{field:field}" />
+                                    </f:case>
+                                    <f:case default="true">
+                                        <f:render partial="Fields/Textfield" arguments="{field:field}" />
+                                    </f:case>
+                                </f:switch>
+                            </f:for>
+                        </f:then>
+                        <f:else>
+                            <f:render partial="Fields/Textfield" arguments="{_all}" />
+                        </f:else>
+                    </f:if>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <f:form.hidden value="{controlHash}.{controlString}" name="control" />
+                            <f:form.hidden value="{transId}" name="transId" />
+                            <f:form.hidden value="{nextStep}" name="step" />
+                            <f:form.button class="btn btn-default" name="submitNext" id="toNext-{controlHash}">{f:translate(key:'submitNext')}</f:form.button>
+                        </div>
+                    </div>
+                </f:form>
+            </f:case>
+            <f:case value="2">
+                <f:form action="create" controller="Subscriber" name="subscriber" class="form-horizontal">
+                    <f:if condition="{subscriber}">
+                        <f:then>
+                            <f:for each="{fields}" as="field">
+                                <f:render partial="Fields/Confirm" arguments="{field:field}" />
+                            </f:for>
+                        </f:then>
+                    </f:if>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <f:form.hidden value="{controlHash}.{controlString}" name="control" />
+                            <f:form.hidden value="{transId}" name="transId" />
+                            <f:form.hidden value="create" name="action" />
+                            <f:form.button class="btn btn-default" name="submitOk" id="toNext-{controlHash}">{f:translate(key:'submitOk')}</f:form.button>
+                        </div>
+                    </div>
+                </f:form>
+            </f:case>
+        </f:switch>
+    </f:if>
+</f:section>

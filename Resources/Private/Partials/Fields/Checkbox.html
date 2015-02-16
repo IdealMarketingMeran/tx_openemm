@@ -1,0 +1,17 @@
+<div class="form-group{field.errorClassWrap}" id="field-{field.property}-wrap">
+    <div class="col-sm-offset-2 col-sm-10">
+        <div class="checkbox">
+            <label>
+                <f:if condition="{field.required}">
+                    <f:then>
+                        <f:form.checkbox property="{field.property}" class="required{field.errorClassInput}" value="1" id="field-{field.property}" />
+                        <span class="required">*</span>
+                    </f:then>
+                    <f:else>
+                        <f:form.checkbox property="{field.property}" value="1" id="field-{field.property}" />
+                    </f:else>
+                </f:if> {field.name}
+            </label>
+        </div>
+    </div>
+</div>	

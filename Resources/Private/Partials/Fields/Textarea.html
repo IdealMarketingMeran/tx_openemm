@@ -1,0 +1,23 @@
+<div class="form-group{field.errorClassWrap}" id="field-{field.property}-wrap">
+    <label for="{field.property}" class="col-sm-2 control-label">{field.name}
+        <f:if condition="{field.required}">
+            <f:then>
+                <span class="required">*</span>
+            </f:then>
+        </f:if>
+    </label>
+    <div class="col-sm-10">
+        <f:if condition="{field.required}">
+            <f:then>
+                <f:form.textarea property="{field.property}" class="form-control required{field.errorClassInput}" rows="3" id="field-{field.property}" />
+                <f:if condition="{field.hasError}">
+                    <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                </f:if>
+            </f:then>
+            <f:else>
+                <f:form.textarea property="{field.property}" class="form-control" rows="3" id="field-{field.property}" />
+            </f:else>
+        </f:if>
+    </div>
+</div>
+	

@@ -67,7 +67,7 @@
                                 <type>select</type>
                                 <itemsProcFunc>\Ideal\Openemm\Utility\FlexFormHelper->getMailinglists</itemsProcFunc>
                                 <maxitems>99</maxitems>
-                                <size>5</size>
+                                <size>6</size>
                             </config>
                         </TCEforms>
                     </settings.new.mailinglists.all>
@@ -78,10 +78,33 @@
                                 <type>select</type>
                                 <itemsProcFunc>\Ideal\Openemm\Utility\FlexFormHelper->getMailinglists</itemsProcFunc>
                                 <maxitems>99</maxitems>
-                                <size>5</size>
+                                <size>6</size>
                             </config>
                         </TCEforms>
                     </settings.new.mailinglists.selectable>
+                    
+                    <settings.new.subscriber.fields>
+                        <TCEforms>
+                            <label>Fields</label>
+                            <config>
+                                <type>select</type>
+                                <itemsProcFunc>\Ideal\Openemm\Utility\FlexFormHelper->getSubscriberFields</itemsProcFunc>
+                                <maxitems>99</maxitems>
+                                <size>6</size>
+                            </config>
+                        </TCEforms>
+                    </settings.new.subscriber.fields>
+                    <settings.new.subscriber.required>
+                        <TCEforms>
+                            <label>Required Fields</label>
+                            <config>
+                                <type>select</type>
+                                <itemsProcFunc>\Ideal\Openemm\Utility\FlexFormHelper->getSubscriberFields</itemsProcFunc>
+                                <maxitems>99</maxitems>
+                                <size>6</size>
+                            </config>
+                        </TCEforms>
+                    </settings.new.subscriber.required>
                 </el>
             </ROOT>
         </new>

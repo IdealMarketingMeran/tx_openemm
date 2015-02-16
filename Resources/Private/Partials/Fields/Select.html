@@ -1,0 +1,19 @@
+<div class="form-group{field.errorClassWrap}" id="field-{field.property}-wrap">
+    <label for="{field.property}" class="col-sm-2 control-label">{field.name}
+        <f:if condition="{field.required}">
+            <f:then>
+                <span class="required">*</span>
+            </f:then>
+        </f:if>
+    </label>
+    <div class="col-sm-10">
+        <f:if condition="{field.required}">
+            <f:then>
+                <f:form.select property="{field.property}" options="{field.options}" class="form-control required{field.errorClassInput}" id="field-{field.property}" />
+            </f:then>
+            <f:else>
+                <f:form.select property="{field.property}" options="{field.options}" class="form-control" id="field-{field.property}" />
+            </f:else>
+        </f:if>
+    </div>
+</div>
