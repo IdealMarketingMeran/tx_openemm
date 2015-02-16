@@ -33,9 +33,41 @@ namespace Ideal\Openemm\Services\Api\Mapper;
  * @author Markus Pircher
  */
 abstract class SubscriberMapper {
-    
+
+    /**
+     * Map Soap Node to Model
+     * @param object $subscriber
+     * @return \Ideal\Openemm\Model\SubscriberApiModel
+     */
     public static function MapFromSoap($subscriber) {
         $subscriberModel = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Ideal\\Openemm\\Model\\SubscriberApiModel');
-        //$subscriberModel->custommerId = $subscriber->
+        $subscriberModel->customerID = $subscriber->customerID;
+
+        $parameters = array();
+        foreach ($subscriber->parameters->item as $parameter) {
+            $parameters[$parameter->key] = $parameter->value;
+        }
+        $subscriberModel->parameters = $parameters;
+        return $subscriberModel;
     }
+
+    /**
+     * Map Model to SOAP Request Array
+     * @param \Ideal\Openemm\Model\SubscriberApiModel $subscriberApiModel
+     */
+    public static function MapToSoap(\Ideal\Openemm\Model\SubscriberApiModel $subscriberApiModel) {
+        $subscriber = array();
+        $subscriber['customerID'] = $subscriberApiModel->customerID;
+
+        $item = array();
+        foreach ($subscriberApiModel->parameters as $key => $value) {
+            $item[] = array(
+                "key" => new \SoapVar($key, XSD_STRING, "string", "http://www.w3.org/2001/XMLSchema"),
+                "value" => new \SoapVar($value, XSD_STRING, "string", "http://www.w3.org/2001/XMLSchema")
+            );
+        }
+        $subscriber['parameters'] = $item;
+        return $subscriber;
+    }
+
 }

@@ -32,7 +32,16 @@ namespace Ideal\Openemm\Model;
  *
  * @author Markus Pircher
  */
-class SubscriberApiModel  {
+class SubscriberApiModel {
+    /**
+     * Id of customer
+     * @var int $customerID
+     */
     public $customerID;
-    public $parameter;
+    
+    /**
+     * Parrameter of customer
+     * @var array $parameters
+     */
+    public $parameters;
 }

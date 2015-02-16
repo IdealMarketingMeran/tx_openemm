@@ -65,6 +65,8 @@ class OpenEMMService {
                     $this->settings['webservice']['password'], 
                     null, 
                     $this->settings['webservice']['soapOption']);
+        } else {
+            throw new \Exception(print_r($settings, true));
         }
         return $this->settings;
     }
@@ -75,6 +77,73 @@ class OpenEMMService {
      */
     public function GetSoapClient() {
         return $this->wsseSoapClient;
+    }
+    
+    /**
+     * 
+     * @param int $subscriberId
+     * @return \Ideal\Openemm\Model\SubscriberApiModel
+     */
+    public function GetSubscriber($subscriberId)
+    {        
+        $subscriber = $this->wsseSoapClient->GetSubscriber(array("customerID" => intval($subscriberId)));
+        return \Ideal\Openemm\Services\Api\Mapper\SubscriberMapper::MapFromSoap($subscriber);
+    }
+    
+    /**
+     * Add Subscriber
+     * @param \Ideal\Openemm\Model\SubscriberApiModel $subscriberApiModel
+     * @param array $mailinglists
+     * @return \Ideal\Openemm\Model\SubscriberApiModel
+     */
+    public function AddSubscriber(\Ideal\Openemm\Model\SubscriberApiModel $subscriberApiModel, array $mailinglists = null) {
+        $subscriber = \Ideal\Openemm\Services\Api\Mapper\SubscriberMapper::MapToSoap($subscriberApiModel);
+        unset($subscriber['customerID']);
+        $subscriber['doubleCheck'] = true;
+        $subscriber['keyColumn'] = "email";
+        $subscriber['overwrite'] = false;
+        $response = $this->wsseSoapClient->AddSubscriber($subscriber);
+        if($response->customerID != 0) {
+            $subscriberApiModel->customerID = $response->customerID; 
+        }
+        
+        if($mailinglists != null && count($mailinglists) > 0) {
+            foreach($mailinglists as $listid) {
+                $this->SetSubscriberBinding($subscriberApiModel->customerID, $listid);
+            }
+        }
+        
+        return $subscriberApiModel;
+    }
+    
+    /**
+     * Set or update Binding
+     * @param int $customerID
+     * @param int $mailinglistID
+     * @param int $mediatype
+     * @param int $status
+     * @param string $userType
+     * @param string $remark
+     * @param int $exitMailingID
+     */
+    public function SetSubscriberBinding($customerID, $mailinglistID, $mediatype = 0, $status = 1, $userType = "W", $remark = "tx_openemm", $exitMailingID = 0) {
+        $request = array(
+            'customerID' => $customerID,
+            'mailinglistID' => $mailinglistID,
+            'mediatype' => $mediatype,
+            'status' => $status,
+            'userType' => $userType,
+            'remark' => $remark,
+            'exitMailingID' => $exitMailingID = 0
+        );
+        $this->wsseSoapClient->SetSubscriberBinding($request);
+    }
+    
+    /**
+     * List all Mailinglists
+     */
+    public function ListMailinglists() {
+        return $this->wsseSoapClient->ListMailinglists();
     }
 
 }
