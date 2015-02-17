@@ -1,0 +1,14 @@
+config.tx_extbase {
+    persistence {
+        classes {
+            Ideal\Openemm\Domain\Model\CountryZone {
+                mapping {
+                    tableName = static_country_zones
+                }
+            }
+        }
+    }
+    objects {
+        SJBR\StaticInfoTables\Domain\Model\CountryZone.className = Ideal\Openemm\Domain\Model\CountryZone
+    }
+}

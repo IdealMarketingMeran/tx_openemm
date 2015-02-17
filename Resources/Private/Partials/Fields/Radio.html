@@ -1,0 +1,19 @@
+<div class="form-group{field.errorClassWrap}" id="field-{field.property}-wrap">
+    <label for="{field.property}" class="col-sm-2 control-label">{field.name}
+        <f:if condition="{field.required}">
+            <f:then>
+                <span class="required">*</span>
+            </f:then>
+        </f:if>
+    </label>
+    <div class="col-sm-10">
+        <f:for each="{field.options}" as="option" iteration="iterator" key="key">
+            <div class="radio">
+                <label>
+                    <f:form.radio property="{field.property}" value="{key}" id="field-{field.property}-{iterator}" />
+                    {option}
+                </label>
+            </div>
+        </f:for>
+    </div>
+</div>

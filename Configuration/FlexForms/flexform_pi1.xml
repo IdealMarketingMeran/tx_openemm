@@ -16,7 +16,7 @@
                                 <items>
                                     <numIndex index="0">
                                         <numIndex index="0">New Subscriber</numIndex>
-                                        <numIndex index="1">Subscriber->new;Subscriber->create;Subscriber->confirm;</numIndex>
+                                        <numIndex index="1">Subscriber->new;Subscriber->create;Subscriber->confirm;Subscriber->getZoneAjax;</numIndex>
                                     </numIndex>
                                     <numIndex index="1">
                                         <numIndex index="0">Update Subscriber</numIndex>
@@ -37,7 +37,7 @@
             <ROOT>
                 <TCEforms>
                     <sheetTitle>New Subscriber</sheetTitle>
-                    <displayCond><![CDATA[FIELD:main.switchableControllerActions:=:Subscriber->new;Subscriber->create;Subscriber->confirm;]]></displayCond>
+                    <displayCond><![CDATA[FIELD:main.switchableControllerActions:=:Subscriber->new;Subscriber->create;Subscriber->confirm;Subscriber->getZoneAjax;]]></displayCond>
                 </TCEforms>
                 <type>array</type>
                 <el>                    

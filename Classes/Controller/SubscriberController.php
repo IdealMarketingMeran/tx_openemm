@@ -2,7 +2,7 @@
 
 namespace Ideal\Openemm\Controller;
 
-/* **************************************************************
+/* * *************************************************************
  *
  *  Copyright notice
  *
@@ -33,7 +33,7 @@ namespace Ideal\Openemm\Controller;
  * @author Markus Pircher
  */
 class SubscriberController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
-    
+
     /**
      * Utilitys
      *
@@ -41,7 +41,28 @@ class SubscriberController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContr
      * @inject
      */
     protected $div = NULL;
-    
+
+    /**
+     * Get zones from Isocode
+     * 
+     * @param string $countryIsoA3
+     * @ignorevalidation $countryIsoA3
+     * @return string JSON Zone
+     */
+    public function getZoneAjaxAction($countryIsoA3) {
+        $zoneRepository = $this->objectManager->get('Ideal\\Openemm\\Domain\\Repository\\CountryZoneRepository');
+        $zones = $zoneRepository->findByIsoCodeA3($countryIsoA3);
+        $options = array();
+        foreach ($zones as $zone) {
+            //$options[$zone->getUid()] = $zone->getLocalName();
+            $options[] = array(
+                'key' => $zone->getIsoCode(),
+                'value' => $zone->getLocalName()
+            );
+        }
+        return json_encode($options);
+    }
+
     /**
      * Form
      * 
@@ -135,7 +156,7 @@ class SubscriberController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContr
         }
 
         //Step 1
-        if ($step == 1) {            
+        if ($step == 1) {
             //fields
             if (isset($this->settings['new']['subscriber']['fields']) && !empty($this->settings['new']['subscriber']['fields'])) {
                 $fields = $this->div->prepareFields($this->settings, $error, 'new');
@@ -167,4 +188,5 @@ class SubscriberController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContr
         $this->view->assign('participant', $participant);
         $this->view->assign('contest', $contests);
     }
+
 }

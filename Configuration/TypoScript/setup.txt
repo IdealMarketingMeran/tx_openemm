@@ -22,7 +22,14 @@ plugin.tx_openemm {
         }
         fieldTypes {
             email = textfield
-            
+            title = select
+            gender = radio
+            lastname = textfield
+            firstname = textfield
+            mailtype = radio
+            country = select
+            zone = select
+            region = select
         }
     }
 }
@@ -74,5 +81,32 @@ module.tx_openemm {
 }
 
 page.includeJS {
-    //eventBooking = EXT:tx_openemm/Resources/Public/Js/validate.js
+    openemm = EXT:openemm/Resources/Public/Js/form.js
 }
+
+#########################
+# Ajax page config
+#########################
+tx_openemm_pi1_ajax = PAGE
+tx_openemm_pi1_ajax {
+  typeNum = 2415377
+  config {
+    disableAllHeaderCode = 1
+    disablePrefixComment = 1
+    additionalHeaders = Content-type:application/json
+    xhtml_cleaning = 0
+    admPanel = 0
+    debug = 0
+    no_cache = 1
+  }
+  10 < styles.content.get
+  10 {
+     select.where = colpos = 0
+     select.andWhere = list_type='openemm_pi1'
+  }
+}
+[globalVar = GP:type = 2415377]
+    lib.stdheader > 
+    lib.header >
+    tt_content.stdWrap.innerWrap >
+[end]

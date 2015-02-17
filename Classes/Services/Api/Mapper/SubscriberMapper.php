@@ -37,10 +37,10 @@ abstract class SubscriberMapper {
     /**
      * Map Soap Node to Model
      * @param object $subscriber
-     * @return \Ideal\Openemm\Model\SubscriberApiModel
+     * @return \Ideal\Openemm\Domain\Model\SubscriberApiModel
      */
     public static function MapFromSoap($subscriber) {
-        $subscriberModel = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Ideal\\Openemm\\Model\\SubscriberApiModel');
+        $subscriberModel = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Ideal\\Openemm\\Domain\\Model\\SubscriberApiModel');
         $subscriberModel->customerID = $subscriber->customerID;
 
         $parameters = array();
@@ -53,9 +53,9 @@ abstract class SubscriberMapper {
 
     /**
      * Map Model to SOAP Request Array
-     * @param \Ideal\Openemm\Model\SubscriberApiModel $subscriberApiModel
+     * @param \Ideal\Openemm\Domain\Model\SubscriberApiModel $subscriberApiModel
      */
-    public static function MapToSoap(\Ideal\Openemm\Model\SubscriberApiModel $subscriberApiModel) {
+    public static function MapToSoap(\Ideal\Openemm\Domain\Model\SubscriberApiModel $subscriberApiModel) {
         $subscriber = array();
         $subscriber['customerID'] = $subscriberApiModel->customerID;
 

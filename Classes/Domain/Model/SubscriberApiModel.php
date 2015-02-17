@@ -1,6 +1,6 @@
 <?php
 
-namespace Ideal\Openemm\Model;
+namespace Ideal\Openemm\Domain\Model;
 
 /* * *************************************************************
  *

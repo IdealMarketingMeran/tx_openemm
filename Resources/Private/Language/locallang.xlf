@@ -1,8 +1,151 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-	<file source-language="en" datatype="plaintext" original="messages" date="2015-02-12T16:53:15Z" product-name="openemm">
-		<header/>
-		<body>
-		</body>
-	</file>
+    <file source-language="en" datatype="plaintext" original="messages" date="2015-02-12T16:53:15Z" product-name="openemm">
+        <header/>
+        <body>
+            <!-- Default Fields -->
+            <trans-unit id="fields.email">
+                <source>E-mail</source>
+            </trans-unit>
+            <trans-unit id="fields.emailype">
+                <source>E-Mail Type</source>
+            </trans-unit>
+            <trans-unit id="fields.gender">
+                <source>Gender</source>
+            </trans-unit>
+            <trans-unit id="fields.title">
+                <source>Title</source>
+            </trans-unit>
+            <trans-unit id="fields.gender">
+                <source>Gender</source>
+            </trans-unit>
+            <trans-unit id="fields.firstname">
+                <source>First Name</source>
+            </trans-unit>
+            <trans-unit id="fields.lastname">
+                <source>Last Name</source>
+            </trans-unit>
+            
+            <!-- Optional Fields -->
+            <trans-unit id="fields.address">
+                <source>Address</source>
+            </trans-unit>
+            <trans-unit id="fields.zip">
+                <source>Zip</source>
+            </trans-unit>
+            <trans-unit id="fields.city">
+                <source>City</source>
+            </trans-unit>
+            <trans-unit id="fields.country">
+                <source>Country</source>
+            </trans-unit>
+            <trans-unit id="fields.zone">
+                <source>Zone</source>
+            </trans-unit>
+            <trans-unit id="fields.region">
+                <source>Zone</source>
+            </trans-unit>
+            <trans-unit id="fields.phone">
+                <source>Phone</source>
+            </trans-unit>
+            <trans-unit id="fields.fax">
+                <source>Fax</source>
+            </trans-unit>
+            <trans-unit id="fields.mobile">
+                <source>Mobile</source>
+            </trans-unit>
+            <trans-unit id="fields.www">
+                <source>Website</source>
+            </trans-unit>
+            <trans-unit id="fields.company">
+                <source>company</source>
+            </trans-unit>
+            <trans-unit id="fields.vat">
+                <source>VAT</source>
+            </trans-unit>
+               
+            <trans-unit id="submitNext">
+                <source>Next</source>
+            </trans-unit>
+            <trans-unit id="submitBack">
+                <source>Back</source>
+            </trans-unit>
+            <trans-unit id="submitOk">
+                <source>Ok</source>
+            </trans-unit>
+            <trans-unit id="submitConfirm">
+                <source>Confirm</source>
+            </trans-unit>
+            
+            <trans-unit id="pleaceSelect">
+                <source> -- pleace select -- </source>
+            </trans-unit>
+            <trans-unit id="fields.title.1">
+                <source>Mr.</source>
+            </trans-unit>
+            <trans-unit id="fields.title.2">
+                <source>Mrs.</source>
+            </trans-unit>
+            <trans-unit id="fields.title.3">
+                <source>Family</source>
+            </trans-unit>
+            <trans-unit id="fields.title.4">
+                <source>Company</source>
+            </trans-unit>            
+            
+            <trans-unit id="male">
+                <source>Male</source>
+            </trans-unit>
+            <trans-unit id="female">
+                <source>Female</source>
+            </trans-unit>
+            
+            <trans-unit id="fatalFormError">
+                <source>Fatal error when processing the data, please try again later.</source>
+            </trans-unit>
+            <trans-unit id="fatalFormSecurityError">
+                <source>During the processing of the data, there was a security problem.</source>
+            </trans-unit>
+            <trans-unit id="formTimeout">
+                <source>Timeout</source>
+            </trans-unit>
+            <trans-unit id="fatalFormErrorTitle">
+                <source>A fatal error occurred</source>
+            </trans-unit>            
+            <trans-unit id="formErrorDefaultTitle">
+                <source>A error occurred</source>
+            </trans-unit>            
+            <trans-unit id="formErrorEmpty">
+                <source>Field can not be empty</source>
+            </trans-unit>            
+            <trans-unit id="formErrorEmail">
+                <source>Please enter a valid email address</source>
+            </trans-unit>            
+            <trans-unit id="formErrorChecked">
+                <source>Field must be checked</source>
+            </trans-unit>            
+            <trans-unit id="formErrorNumberic">
+                <source>Field must be numeric</source>
+            </trans-unit>
+            <trans-unit id="formErrorDefault">
+                <source>Please try again later</source>
+            </trans-unit>            
+            <trans-unit id="formErrorMaxParticipants">
+                <source>Exceeded maximum number of participants</source>
+            </trans-unit>
+            <trans-unit id="formErrorFilesize">
+                <source>Image to Large</source>
+            </trans-unit>            
+            <trans-unit id="formErrorFormat">
+                <source>File Format not allowed</source>
+            </trans-unit>
+            
+            <trans-unit id="mailSubjectAdminNewSubscriberNotification">
+                <source>New Participan</source>
+            </trans-unit>            
+            <trans-unit id="mailSubjectNewSubscriberNotification">
+                <source>Thanks</source>
+            </trans-unit>
+        </body>
+    </file>
 </xliff>

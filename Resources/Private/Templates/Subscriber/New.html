@@ -25,6 +25,9 @@
                                     <f:case value="select">
                                         <f:render partial="Fields/Select" arguments="{field:field}" />
                                     </f:case>
+                                    <f:case value="radio">
+                                        <f:render partial="Fields/Radio" arguments="{field:field}" />
+                                    </f:case>
                                     <f:case default="true">
                                         <f:render partial="Fields/Textfield" arguments="{field:field}" />
                                     </f:case>

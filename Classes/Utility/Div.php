@@ -3,6 +3,7 @@
 namespace Ideal\Openemm\Utility;
 
 use \TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use \TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 
 /* * *************************************************************
@@ -49,7 +50,7 @@ class Div {
      * @param string $settingspart
      * @return array
      */
-    public function prepareFields(array $settings, array $fieldErrors, $settingspart = 'new') {
+    public function prepareFields(array $settings, array $fieldErrors, $settingspart = 'new', $request = array()) {
         $fieldsReturn = array('fields' => array(), 'required' => array());
 
         $ofields = explode(',', $settings[$settingspart]['subscriber']['fields']);
@@ -62,8 +63,8 @@ class Div {
         foreach ($ofields as $field) {
             $fieldInfo = explode(':', $field);
             $fields[$fieldInfo[0]]['property'] = $fieldInfo[0];
-            #$fields[$field]['name'] = LocalizationUtility::translate('tx_eventbooking_domain_model_booking.' . \Ideal\EventBooking\Utility\Convert::fromCamelCase($fieldInfo[0]), 'event_booking');
-            $fields[$fieldInfo[0]]['name'] = LocalizationUtility::translate('tx_openemm_domain_model_participants.' . \TYPO3\CMS\Core\Utility\GeneralUtility::camelCaseToLowerCaseUnderscored($fieldInfo[0]), 'contest');
+            $fieldLabel = LocalizationUtility::translate('fields.' . GeneralUtility::camelCaseToLowerCaseUnderscored($fieldInfo[0]), 'openemm');
+            $fields[$fieldInfo[0]]['name'] = !empty($fieldLabel) ? $fieldLabel : $fieldInfo[0] ;
 
             //Fieldtype
             if (count($fieldInfo) > 1) {
@@ -71,17 +72,19 @@ class Div {
             } else {
                 $fields[$fieldInfo[0]]['type'] = 'textfield';
             }
-            if ($fieldInfo[1] == 'select') {
+            if ($fieldInfo[1] == 'select' || $fieldInfo[1] == 'radio') {
                 $options = array();
+                //Gender
                 if ($fieldInfo[0] == 'gender') {
-                    //$options[0] = LocalizationUtility::translate('pleaceSelect', 'contest');
-                    $options[0] = LocalizationUtility::translate('male', 'contest');
-                    $options[1] = LocalizationUtility::translate('female', 'contest');
+                    //$options[0] = LocalizationUtility::translate('pleaceSelect', 'openemm');
+                    $options[0] = LocalizationUtility::translate('male', 'openemm');
+                    $options[1] = LocalizationUtility::translate('female', 'openemm');
                 }
+                //Title
                 if ($fieldInfo[0] == 'title') {
-                    $options[0] = LocalizationUtility::translate('pleaceSelect', 'contest');
+                    $options[0] = LocalizationUtility::translate('pleaceSelect', 'openemm');
                     for ($i = 1; $i < 50; $i++) {
-                        $selectName = LocalizationUtility::translate('Participants.' . \TYPO3\CMS\Core\Utility\GeneralUtility::camelCaseToLowerCaseUnderscored($fieldInfo[0]) . '.' . $i, 'contest');
+                        $selectName = LocalizationUtility::translate('fields.' . GeneralUtility::camelCaseToLowerCaseUnderscored($fieldInfo[0]) . '.' . $i, 'openemm');
                         if ($selectName != NULL) {
                             $options[$i] = $selectName;
                         } else {
@@ -89,15 +92,37 @@ class Div {
                         }
                     }
                 }
-                $fields[$fieldInfo[0]]['options'] = $options;
-            }
-            if ($fieldInfo[1] == 'country') {
-                $fields[$fieldInfo[0]]['type'] = 'select';
-                $countryRepository = $this->objectManager->get('SJBR\\StaticInfoTables\\Domain\\Repository\\CountryRepository');
-                $countrys = $countryRepository->findAll();
+                if($fieldInfo[0] == 'country' || $fieldInfo[0] == 'region' || $fieldInfo[0] == 'zone')
+                    $countryRepository = $this->objectManager->get('SJBR\\StaticInfoTables\\Domain\\Repository\\CountryRepository');
                 
-                foreach($countrys as $country) {
-                    $options[$country->getIsoCodeA3()] = $country->getShortNameLocal();
+                //Country
+                if ($fieldInfo[0] == 'country') {
+                    $options[0] = LocalizationUtility::translate('pleaceSelect', 'openemm');
+                    $countrys = $countryRepository->findAll();
+
+                    foreach($countrys as $country) {
+                        //$options[$country->getUid()] = $country->getShortNameLocal();
+                        $options[$country->getIsoCodeA3()] = $country->getShortNameLocal();
+                    }
+                    $fields[$fieldInfo[0]]['options'] = $options;
+                }
+                //Region-Zone
+                //$request['country'] = "ITA";
+                if ($fieldInfo[0] == 'region' || $fieldInfo[0] == 'zone') {
+                    $options[0] = LocalizationUtility::translate('pleaceSelect', 'openemm'); 
+                    if(count($request) > 0 && isset($request['country'])) {                  
+
+                        //$country = $countryRepository->findAllOrderedBy("isoCodeA3");
+
+                        $zoneRepository = $this->objectManager->get('Ideal\\Openemm\\Domain\\Repository\\CountryZoneRepository');
+                        $zones = $zoneRepository->findByIsoCodeA3($request['country']);
+                        foreach($zones as $zone) {
+                            //$options[$zone->getUid()] = $zone->getLocalName();
+                            $options[$zone->getIsoCode()] = $zone->getLocalName();
+                        }
+                    } else {
+                        //$options[0] = LocalizationUtility::translate('pleaceSelectContry', 'openemm');  
+                    }
                 }
                 $fields[$fieldInfo[0]]['options'] = $options;
             }
@@ -175,7 +200,7 @@ class Div {
      * Store Images finaly
      * 
      * @param string $transId Registrations transactions ID
-     * @param string $subFolder Name of Subfolder (contestname or Id)
+     * @param string $subFolder Name of Subfolder (openemmname or Id)
      * @param string $filePrefix File Prefix;
      * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Ideal\Contest\Domain\Model\FileReference>
      */
@@ -185,7 +210,7 @@ class Div {
         $storage = $this->storageRepository->findByUid('1');
         //$finalStorage = $this->storageRepository->findByUid('1');
 
-        $folder = "contest/" . $subFolder . "/";
+        $folder = "openemm/" . $subFolder . "/";
         if (!$storage->hasFolder($folder)) {
             $storage->createFolder($folder);
         }
@@ -239,13 +264,13 @@ class Div {
 
     /**
      * 
-     * @param \Ideal\Contest\Domain\Model\Contests $contests
+     * @param \Ideal\Contest\Domain\Model\Contests $openemms
      * @param \TYPO3\CMS\Extbase\Domain\Model\FrontendUser $user
      * @param type $votingGroup
      * @return boolean
      */
-    public function canVote(\Ideal\Contest\Domain\Model\Contests $contests, \TYPO3\CMS\Extbase\Domain\Model\FrontendUser $user = null, $votingGroup = "") {
-        $currentVotings = $this->votingsRepository->findVotingsFromContest($contests);
+    public function canVote(\Ideal\Contest\Domain\Model\Contests $openemms, \TYPO3\CMS\Extbase\Domain\Model\FrontendUser $user = null, $votingGroup = "") {
+        $currentVotings = $this->votingsRepository->findVotingsFromContest($openemms);
         if (count($currentVotings) == 0) {
             return true;
         } else {

@@ -142,7 +142,7 @@ class FlexFormHelper {
             'creation_date_hour_date',
             'customer_id'
         );
-        $defaultType = ":textfield";
+        $defaultType = ":textfield:default";
         if(!isset($this->cache['SubscriberFields'])) {
             try {
                 $subscriber = $this->openEmmService->GetSubscriber(1);
@@ -156,7 +156,7 @@ class FlexFormHelper {
                 }
                 $options[] = array(
                     $key,
-                    $key . (is_array($this->settings['fieldTypes']) && in_array($key, $this->settings['fieldTypes']) ? ' : ' . $this->settings['fieldTypes'][$key] : $defaultType)
+                    $key . (is_array($this->settings['fieldTypes']) && array_key_exists($key, $this->settings['fieldTypes']) ? ':' . $this->settings['fieldTypes'][$key] : $defaultType)
                 );
             }
             $this->cache['SubscriberFields'] = $options;
