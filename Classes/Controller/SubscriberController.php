@@ -188,5 +188,21 @@ class SubscriberController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContr
         $this->view->assign('participant', $participant);
         $this->view->assign('contest', $contests);
     }
+    
+    /**
+     * Send User to OpenEMM
+     */
+    public function createAction() {
+        
+    }
+    
+    /**
+     * Confimation and Update Subscriber
+     * 
+     * @param string $authCode
+     */
+    public function confirmAction($authCode) {
+        
+    }
 
 }

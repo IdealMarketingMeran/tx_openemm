@@ -1,12 +1,12 @@
 $(document).ready(function () {
-    var zone = $("#field-zone");
-    if ($("#field-region").length > 0 && $("#field-zone").length == 0) {
-        zone = $("#field-region");
+    var openemmFieldZone = $(".tx-openemm #field-zone");
+    if ($(".tx-openemm #field-region").length > 0 && $(".tx-openemm #field-zone").length == 0) {
+        openemmFieldZone = $(".tx-openemm #field-region");
     }
-    if(zone.find('option').length < 2)
-        zone.attr('disabled', 'disabled');
+    if(openemmFieldZone.find('option').length < 2)
+        openemmFieldZone.attr('disabled', 'disabled');
     
-    $("#field-country").bind('change', function () {
+    $(".tx-openemm #field-country").bind('change', function () {
         var $this = $(this);
         var ajaxRequestUrl = $this.parents("form").attr('action');
         var para = ajaxRequestUrl.split('&');
@@ -23,21 +23,21 @@ $(document).ready(function () {
             url: ajaxRequestUrl,
             data: {type: 2415377}
         }).done(function (data) {
-            zone.find('option').each(function () {
+            openemmFieldZone.find('option').each(function () {
                 if ($(this).attr('value') != '0' && $(this).attr('value') != 'NULL') {
                     $(this).remove();
                     console.log('delete!');
                 }
             });
             $.each(data, function () {
-                zone.append('<option value="' + this.key + '">' + this.value + '</option>');
+                openemmFieldZone.append('<option value="' + this.key + '">' + this.value + '</option>');
             });
-            if(zone.find('option').length < 2) {
-                zone.attr('disabled', 'disabled');
-                zone.find('option').attr('value', 'NULL');
+            if(openemmFieldZone.find('option').length < 2) {
+                openemmFieldZone.attr('disabled', 'disabled');
+                openemmFieldZone.find('option').attr('value', 'NULL');
             } else {
-                zone.removeAttr('disabled');
-                $(zone.find('option').get(0)).attr('value', '0');
+                openemmFieldZone.removeAttr('disabled');
+                $(openemmFieldZone.find('option').get(0)).attr('value', '0');
             }
             
             console.log(data);
