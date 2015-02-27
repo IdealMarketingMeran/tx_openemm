@@ -1,8 +1,32 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-	<file source-language="en" datatype="plaintext" original="messages" date="2015-02-12T16:53:15Z" product-name="openemm">
-		<header/>
-		<body>
-		</body>
-	</file>
+    <file source-language="en" datatype="plaintext" original="messages" date="2015-02-12T16:53:15Z" product-name="openemm">
+        <header/>
+        <body>
+            <trans-unit id="tx_openemm_domain_model_subscriber">
+                <source>Subscriber</source>
+            </trans-unit>
+            <trans-unit id="tx_openemm_domain_model_subscriber.customer_id">
+                <source>Customer Id</source>
+            </trans-unit>
+            <trans-unit id="tx_openemm_domain_model_subscriber.confirmed">
+                <source>Confirmed</source>
+            </trans-unit>
+            <trans-unit id="tx_openemm_domain_model_subscriber.name">
+                <source>Name</source>
+            </trans-unit>
+            <trans-unit id="tx_openemm_domain_model_subscriber.email">
+                <source>Email</source>
+            </trans-unit>
+            <trans-unit id="tx_openemm_domain_model_subscriber.mailing_lists">
+                <source>Mailing Lists</source>
+            </trans-unit>
+            <trans-unit id="tx_openemm_domain_model_subscriber.unsubscribt">
+                <source>Unsubscribt</source>
+            </trans-unit>
+            <trans-unit id="tx_openemm_domain_model_subscriber.parameters">
+                <source>Parameters</source>
+            </trans-unit>
+        </body>
+    </file>
 </xliff>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+    <file source-language="en" datatype="plaintext" original="messages" date="2015-02-27T10:38:34Z" product-name="openemm">
+        <header/>
+        <body>
+            <trans-unit id="customer_id.description">
+                <source>OpenEMM customer ID</source>
+            </trans-unit>
+            <trans-unit id="confirmed.description">
+                <source>Customer has confirmed per Mail</source>
+            </trans-unit>
+            <trans-unit id="name.description">
+                <source>Name</source>
+            </trans-unit>
+            <trans-unit id="email.description">
+                <source>Email</source>
+            </trans-unit>
+            <trans-unit id="mailing_lists.description">
+                <source>List of Mailinglists</source>
+            </trans-unit>
+            <trans-unit id="unsubscribt.description">
+                <source>If unsubscript request</source>
+            </trans-unit>
+            <trans-unit id="parameters.description">
+                <source>Serialised Parameter Data</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

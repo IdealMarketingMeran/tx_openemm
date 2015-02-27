@@ -45,13 +45,13 @@ overwriteSettings:
       Repository: merge
 
   Configuration:
-    #TCA: merge
+    TCA: merge
     TypoScript: keep
 
   Resources:
     Private:
-      #Language: merge
-      #Templates: keep
+      Language: merge
+      Templates: keep
 
   ext_icon.gif: keep
 

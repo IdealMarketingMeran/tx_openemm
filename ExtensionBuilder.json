@@ -1,5 +1,119 @@
 {
-    "modules": [],
+    "modules": [
+        {
+            "config": {
+                "position": [
+                    690,
+                    87
+                ]
+            },
+            "name": "New Model Object",
+            "value": {
+                "actionGroup": {
+                    "_default0_list": true,
+                    "_default1_show": true,
+                    "_default2_new_create": true,
+                    "_default3_edit_update": true,
+                    "_default4_delete": true,
+                    "customActions": [
+                        "getZoneAjax",
+                        "confirm"
+                    ]
+                },
+                "name": "Subscriber",
+                "objectsettings": {
+                    "addDeletedField": true,
+                    "addHiddenField": false,
+                    "addStarttimeEndtimeFields": false,
+                    "aggregateRoot": true,
+                    "categorizable": false,
+                    "description": "",
+                    "mapToTable": "",
+                    "parentClass": "",
+                    "sorting": false,
+                    "type": "ValueObject",
+                    "uid": "1314326727407"
+                },
+                "propertyGroup": {
+                    "properties": [
+                        {
+                            "allowedFileTypes": "",
+                            "maxItems": "1",
+                            "propertyDescription": "OpenEMM customer ID",
+                            "propertyIsExcludeField": true,
+                            "propertyIsRequired": false,
+                            "propertyName": "customerId",
+                            "propertyType": "Integer",
+                            "uid": "43817497278"
+                        },
+                        {
+                            "allowedFileTypes": "",
+                            "maxItems": "1",
+                            "propertyDescription": "Customer has confirmed per Mail",
+                            "propertyIsExcludeField": true,
+                            "propertyIsRequired": false,
+                            "propertyName": "confirmed",
+                            "propertyType": "Boolean",
+                            "uid": "653107599332"
+                        },
+                        {
+                            "allowedFileTypes": "",
+                            "maxItems": "1",
+                            "propertyDescription": "Name",
+                            "propertyIsExcludeField": true,
+                            "propertyIsRequired": false,
+                            "propertyName": "name",
+                            "propertyType": "String",
+                            "uid": "166039447363"
+                        },
+                        {
+                            "allowedFileTypes": "",
+                            "maxItems": "1",
+                            "propertyDescription": "Email",
+                            "propertyIsExcludeField": true,
+                            "propertyIsRequired": false,
+                            "propertyName": "email",
+                            "propertyType": "String",
+                            "uid": "1299085230891"
+                        },
+                        {
+                            "allowedFileTypes": "",
+                            "maxItems": "1",
+                            "propertyDescription": "List of Mailinglists",
+                            "propertyIsExcludeField": true,
+                            "propertyIsRequired": false,
+                            "propertyName": "mailingLists",
+                            "propertyType": "String",
+                            "uid": "406488535905"
+                        },
+                        {
+                            "allowedFileTypes": "",
+                            "maxItems": "1",
+                            "propertyDescription": "If unsubscript request",
+                            "propertyIsExcludeField": true,
+                            "propertyIsRequired": false,
+                            "propertyName": "unsubscribt",
+                            "propertyType": "String",
+                            "uid": "382874129662"
+                        },
+                        {
+                            "allowedFileTypes": "",
+                            "maxItems": "1",
+                            "propertyDescription": "Serialised Parameter Data",
+                            "propertyIsExcludeField": true,
+                            "propertyIsRequired": false,
+                            "propertyName": "parameters",
+                            "propertyType": "Text",
+                            "uid": "456620409443"
+                        }
+                    ]
+                },
+                "relationGroup": {
+                    "relations": []
+                }
+            }
+        }
+    ],
     "properties": {
         "backendModules": [],
         "description": "OpenEMM Newsletter",
