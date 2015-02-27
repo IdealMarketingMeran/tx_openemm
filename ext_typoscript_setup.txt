@@ -6,9 +6,15 @@ config.tx_extbase {
                     tableName = static_country_zones
                 }
             }
+            Ideal\Openemm\Domain\Model\Country {
+                mapping {
+                    tableName = static_countries
+                }
+            }
         }
     }
     objects {
         SJBR\StaticInfoTables\Domain\Model\CountryZone.className = Ideal\Openemm\Domain\Model\CountryZone
+        SJBR\StaticInfoTables\Domain\Model\Country.className = Ideal\Openemm\Domain\Model\Country
     }
 }

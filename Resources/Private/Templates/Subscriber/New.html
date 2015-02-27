@@ -50,7 +50,7 @@
             </f:case>
             <f:case value="2">
                 <f:form action="create" controller="Subscriber" name="subscriber" class="form-horizontal">
-                    <f:if condition="{subscriber}">
+                    <f:if condition="{fields}">
                         <f:then>
                             <f:for each="{fields}" as="field">
                                 <f:render partial="Fields/Confirm" arguments="{field:field}" />

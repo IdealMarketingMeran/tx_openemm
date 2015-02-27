@@ -155,152 +155,36 @@ class Div {
      * Paping Values to Field Array
      * 
      * @param array $fields
-     * @param \Ideal\Contest\Domain\Model\Participants $participant
+     * @param array $arguments
      */
-    public function mappingParticipantsFields(array $fields, \Ideal\Contest\Domain\Model\Participants $participant) {
-        foreach ($fields as $name => $field) {
-            $getM = "get" . ucfirst($name);
-            if (method_exists($participant, $getM)) {
-                $fields[$name]['value'] = $participant->{$getM}();
-            } else {
-                $fields[$name]['value'] = NULL;
-            }
-        }
-        $fields['debug'] = $fields;
-        return $fields;
-    }
-
-    /**
-     * Store Images Temporal
-     * 
-     * @param array $files $_FILES array
-     * @param string $transId Registrations transactions ID
-     */
-    public function storeTempData(array $files, $transId) {
-        $return = array();
-        /** @var \TYPO3\CMS\Core\Resource\ResourceStorage $storage */
-        $storage = $this->storageRepository->findByUid('1');
-        $this->deleteTempFilesByTransid($transId);
-        for ($i = 0; $i < count($files['name']['images']); $i++) {
-            if ($files['name']['images'][$i] == "") {
-                continue;
-            }
-            $filePathInfo = PathUtility::pathinfo($files['name']['images'][$i]);
-            $files['name']['images'][$i] = '_tmp_participants.' . time() . "." . $transId . "." . $i . "." . strtolower($filePathInfo['extension']);
-            $debug["files['tmp_name']['images'][$i]"] = $files['_temp_']['images'][$i];
-            $newFileObject = $storage->addFile(
-                    $files['tmp_name']['images'][$i], $storage->getFolder("_temp_/"), $files['name']['images'][$i]
-            );
-            $return[$i] = $newFileObject->getProperty('uid');
-        }
-        return $return;
-    }
-
-    /**
-     * Store Images finaly
-     * 
-     * @param string $transId Registrations transactions ID
-     * @param string $subFolder Name of Subfolder (openemmname or Id)
-     * @param string $filePrefix File Prefix;
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Ideal\Contest\Domain\Model\FileReference>
-     */
-    public function storeImages($transId, $subFolder, $filePrefix = "") {
-        $return = array();
-        /** @var \TYPO3\CMS\Core\Resource\ResourceStorage $storage */
-        $storage = $this->storageRepository->findByUid('1');
-        //$finalStorage = $this->storageRepository->findByUid('1');
-
-        $folder = "openemm/" . $subFolder . "/";
-        if (!$storage->hasFolder($folder)) {
-            $storage->createFolder($folder);
-        }
-        $files = $storage->getFilesInFolder($storage->getFolder("_temp_/"));
-        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Ideal\Contest\Domain\Model\FileReference> $objectStorage */
-        foreach ($files as $file) {
-            $namear = explode('.', $file->getName());
-            if ($namear[2] == $transId && $namear[0] == '_tmp_participants') {
-                $storage->moveFile($file, $storage->getFolder($folder), $targetFileName = $filePrefix . $namear[2] . "." . $namear[3] . "." . $namear[4]);
-                $fileReference = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Ideal\\Contest\\Domain\\Model\\FileReference');
-                $fileReference->setOriginalResource($file);
-                $return[] = $fileReference;
-            }
-        }
-        return $return;
-    }
-
-    /**
-     * Delete temporay files by TransId
-     * 
-     * @param string $transId
-     */
-    public function deleteTempFilesByTransid($transId) {
-        /** @var \TYPO3\CMS\Core\Resource\ResourceStorage $storage */
-        $storage = $this->storageRepository->findByUid('1');
-        $oldFiles = $storage->getFilesInFolder($storage->getFolder("_temp_/"));
-        foreach ($oldFiles as $oldFile) {
-            $namear = explode('.', $oldFile->getName());
-            if ($namear[2] == $transId && $namear[0] == '_tmp_participants') {
-                $storage->deleteFile($oldFile);
-            }
-        }
-    }
-
-    /**
-     * Delete temporay files was older as 1 hour
-     * 
-     * @param string $transId
-     */
-    public function deleteTempFilesByTimeOut() {
-        /** @var \TYPO3\CMS\Core\Resource\ResourceStorage $storage */
-        $storage = $this->storageRepository->findByUid('1');
-        $oldFiles = $storage->getFilesInFolder($storage->getFolder("_temp_/"));
-        foreach ($oldFiles as $oldFile) {
-            $namear = explode('.', $oldFile->getName());
-            if ($namear[1] + 3600 < time() && $namear[0] == '_tmp_participants') {
-                $storage->deleteFile($oldFile);
-            }
-        }
-    }
-
-    /**
-     * 
-     * @param \Ideal\Contest\Domain\Model\Contests $openemms
-     * @param \TYPO3\CMS\Extbase\Domain\Model\FrontendUser $user
-     * @param type $votingGroup
-     * @return boolean
-     */
-    public function canVote(\Ideal\Contest\Domain\Model\Contests $openemms, \TYPO3\CMS\Extbase\Domain\Model\FrontendUser $user = null, $votingGroup = "") {
-        $currentVotings = $this->votingsRepository->findVotingsFromContest($openemms);
-        if (count($currentVotings) == 0) {
-            return true;
-        } else {
-            $refererUrl = parse_url($_SERVER['HTTP_REFERER']);
-            if ($_SERVER['HTTP_HOST'] !== $refererUrl["host"]) {
-                return false;
-            }
-            /** @var \Ideal\Contest\Domain\Model\Votings $vote */
-            foreach ($currentVotings as $vote) {
-                if ($user == null) {
-                    if ($this->getVotingSecurity()['hash'] == $vote->getHash() && $vote->getCrdate()->getTimestamp() > (time() - 86400)) {
-                        return false;
-                    }
-                } else {
-                    if ($vote->getFeUser() == $user->getUid() && $vote->getVotingGroup() == $votingGroup) {
-                        return false;
+    public function mappingFields(array $fields, array $arguments) {
+        if(array_key_exists('subscriber', $arguments)) {
+            foreach ($fields as $name => $field) {
+                if(is_array($arguments['subscriber']) && array_key_exists($name, $arguments['subscriber']))
+                {
+                    if($name == 'country' || $name == 'region' || $name == 'zone')
+                        $countryRepository = $this->objectManager->get('Ideal\\Openemm\\Domain\\Repository\\CountryRepository');
+                    if($name == 'country') {
+                        $country = $countryRepository->findByIsoCodeA3($arguments['subscriber'][$name])->getFirst();
+                        $fields[$name]['value'] = $country->getShortNameLocal();
+                    } elseif($name == 'region' || $name == 'zone') {
+                        $zoneRepository = $this->objectManager->get('Ideal\\Openemm\\Domain\\Repository\\CountryZoneRepository');
+                        $zone = $zoneRepository->findByIsoCodeA3($arguments['subscriber']['country'])->getFirst();
+                        $fields[$name]['value'] = $zone->getLocalName();
+                    } elseif($name == 'title') {
+                        $fields[$name]['value'] = LocalizationUtility::translate('fields.title.' . $arguments['subscriber'][$name], 'openemm');
+                    } elseif($name == 'gender') {
+                        $gender = $arguments['subscriber'][$name] == 0 ? LocalizationUtility::translate('male', 'openemm') : LocalizationUtility::translate('female', 'openemm');
+                        $fields[$name]['value'] = $gender;
+                    } else {
+                        $fields[$name]['value'] = $arguments['subscriber'][$name];
                     }
                 }
             }
+        } else {
+            $fields['ERROR']['argument'] = $arguments;
         }
-        return true;
-    }
-
-    public function getVotingSecurity() {
-        return array(
-            'remoteAddr' => $_SERVER['REMOTE_ADDR'],
-            'userAgent' => $_SERVER['HTTP_USER_AGENT'],
-            'hash' => md5($_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT'] . gethostname()),
-            'hostname' => gethostbyaddr($_SERVER['REMOTE_ADDR'])
-        );
+        return $fields;
     }
 
     /**

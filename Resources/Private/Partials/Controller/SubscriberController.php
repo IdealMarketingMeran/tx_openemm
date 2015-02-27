@@ -75,7 +75,7 @@ class SubscriberController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContr
     public function newAction($step = 1) {
         $error = array();
         $debug = array();
-        //$this->request->getArguments();
+        $this->request->getArguments();
 
         //Step 2
         if ($step == 2) {
@@ -92,7 +92,6 @@ class SubscriberController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContr
                         )
                 );
             } else {
-                //$valideFields = \Ideal\Openemm\Validation\Validator::validateParticipant($participant, $this->settings);
                 if (is_array($valideFields) && count($valideFields) > 0) {
                     $flashMessageTitle = LocalizationUtility::translate('formErrorDefaultTitle', 'openemm') != NULL ? LocalizationUtility::translate('formErrorDefaultTitle', 'openemm') : 'formErrorDefaultTitle';
                     $flashMessage = "<ul>";
@@ -135,11 +134,9 @@ class SubscriberController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContr
                     //fields
                     if (isset($this->settings['new']['subscriber']['fields']) && !empty($this->settings['new']['subscriber']['fields'])) {
                         $fields = $this->div->prepareFields($this->settings, $error, 'new');
-                        $fields = $this->div->mappingFields($fields['fields'], $this->request->getArguments());
+                        $fields = $this->div->mappingFields($fields['fields'], $this->arguments);
                         $this->view->assign('fields', $fields);
                         $debug['confirmfields'] = $fields;
-                        $debug['getarguments'] = $this->request->getArguments();
-                        $debug['arguments'] = $this->arguments;
                     }
                 }
             }

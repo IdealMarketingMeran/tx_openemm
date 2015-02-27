@@ -40,7 +40,7 @@ class Validator {
      * @param array $settings
      * @return array|bool (has error array with fields has a error)
      */
-    public static function validateParticipant(array $arguments, array $settings) {
+    public static function validateSubscriber(array $arguments, array $settings) {
         $fields = array();
         $ret = array();
         if (is_string($settings['new']['subscriber']['required'])) {
@@ -75,7 +75,7 @@ class Validator {
      * @return string has error, errormessage, else null
      */
 
-    public static function validateFormSecurity($uid, $control) {
+    public static function validateFormSecurity($control) {
         $errorMsg = null;
         $conrollArray = explode('.', $control);
         if (count($conrollArray) !== 3) {
@@ -86,12 +86,35 @@ class Validator {
                 $errorMsg = LocalizationUtility::translate('formTimeout', 'openemm') != NULL ? LocalizationUtility::translate('formTimeout', 'openemm') : 'formTimeout';
             }
             //hash
-            $controlHash = md5($conrollArray[1] . $conrollArray[2] . $uid . $GLOBALS["TYPO3_CONF_VARS"]['SYS']['encryptionKey']);
+            $controlHash = md5($conrollArray[1] . $conrollArray[2] . $GLOBALS["TYPO3_CONF_VARS"]['SYS']['encryptionKey']);
             if ($controlHash !== $conrollArray[0]) {
                 $errorMsg = LocalizationUtility::translate('fatalFormSecurityError', 'openemm') != NULL ? LocalizationUtility::translate('fatalFormSecurityError', 'openemm') : 'fatalFormSecurityError:hash:' . $control;
             }
         }
         return $errorMsg;
+    }
+    
+    /**
+     * Generate User Authstring
+     * @param int $userid
+     * @return string
+     */
+    public static function getUserAuthcodeString($userid) {        
+        return '$' . $userid . '$' . md5($userid . $GLOBALS["TYPO3_CONF_VARS"]['SYS']['encryptionKey']);
+    }
+    
+    /**
+     * Validate Authstring
+     * @param string $authcode
+     * @return boolean
+     */
+    public static function validateAuthcodeString($authcode) {
+        $array = explode('$', $authcode);
+        $controllHash = md5($array[0] . $GLOBALS["TYPO3_CONF_VARS"]['SYS']['encryptionKey']);
+        if($array[0] === $controllHash) {
+            return true;
+        }
+        return false;
     }
 
 }
