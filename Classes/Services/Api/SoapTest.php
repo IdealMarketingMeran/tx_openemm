@@ -29,11 +29,11 @@ require("Model/SubscriberModel.php");
 
 try {
 // URL of the WSDL document. Modify that for your environment
-    $wsdlURL = "http://ec2-54-93-98-95.eu-central-1.compute.amazonaws.com:8080/openemm-ws2/emmservices.wsdl";
+    $wsdlURL = "";
 
 // Your authentication information
-    $username = "ws_user_01";
-    $password = "KLKbEYazwcUxbBnA";
+    $username = "";
+    $password = "";
 
 // Create new SOAP client
     $soapOptions = array(
@@ -43,7 +43,7 @@ try {
     );
     
     $client = new \Ideal\Api\OpenEMM\WsseSoapClient($wsdlURL, $username, $password, null, $soapOptions);
-    $client->__setLocation("http://ec2-54-93-98-95.eu-central-1.compute.amazonaws.com:8080/openemm-ws2/");
+    $client->__setLocation("");
 
 // Example: Retrieve list of all available webservices
     var_dump($client->__getFunctions());

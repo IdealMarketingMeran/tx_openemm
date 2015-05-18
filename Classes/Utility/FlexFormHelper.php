@@ -28,31 +28,32 @@ namespace Ideal\Openemm\Utility;
  * ************************************************************* */
 
 
-class FlexFormHelper {
-    
+class FlexFormHelper
+{
+
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager 
+     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
      */
     private $objectManager = null;
-    
+
     /**
      * webservice settings
      * @var array
      */
     private $settings;
-    
+
     /**
      * OpenEMM Service
-     * @var \Ideal\Openemm\Services\OpenEMMService 
+     * @var \Ideal\Openemm\Services\OpenEMMService
      */
     private $openEmmService = null;
-    
+
     /**
      * Field Cache
-     * @var array 
+     * @var array
      */
     private $cache;
-    
+
     private function Init()
     {
         $pluginConfiguration = array(
@@ -62,23 +63,23 @@ class FlexFormHelper {
         $bootstrap = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Core\\Bootstrap');
         $bootstrap->initialize($pluginConfiguration);
         $this->objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-        
+
         $configurationManager = $this->objectManager->get('TYPO3\\CMS\Extbase\\Configuration\\ConfigurationManager');
         $configuration = $configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManager::CONFIGURATION_TYPE_FULL_TYPOSCRIPT, 'openemm');
-        
+
         $newConf['webservice'] = $configuration['plugin.']['tx_openemm.']['settings.']['webservice.'];
         $newConf['webservice']['soapOption'] = $configuration['plugin.']['tx_openemm.']['settings.']['webservice.']['soapOption.'];
-        $newConf['fieldTypes'] = $configuration['plugin.']['tx_openemm.']['settings.']['fieldTypes.'];        
+        $newConf['fieldTypes'] = $configuration['plugin.']['tx_openemm.']['settings.']['fieldTypes.'];
         $this->settings = $newConf;
         $this->openEmmService = $this->objectManager->get("Ideal\\Openemm\\Services\\OpenEMMService");
-        
+
         try {
-            $this->openEmmService->Init($newConf);            
+            $this->openEmmService->Init($newConf);
         } catch (\Exception $ex) {
             throw new \Exception("OpenEMMService->Init: " . $ex->getMessage());
         }
     }
-    
+
     /**
      * get all Malinglists for Flexform
      * @param array $fConfig
@@ -86,32 +87,33 @@ class FlexFormHelper {
      * @return type
      * @throws \Exception
      */
-    public function getMailinglists(&$fConfig, $fObj) {
-        if($this->openEmmService == null ) {
+    public function getMailinglists(&$fConfig, $fObj)
+    {
+        if ($this->openEmmService == null) {
             $this->Init();
         }
-        if(!isset($this->cache['Mailinglists'])) {
+        if (!isset($this->cache['Mailinglists'])) {
             try {
                 $lists = $this->openEmmService->ListMailinglists();
             } catch (\SoapFault $ex) {
                 throw $ex;
             }
             $options = array();
-            foreach($lists->item as $item) {
+            foreach ($lists->item as $item) {
                 $options[] = array(
-                    $item->shortname, 
+                    $item->shortname,
                     $item->id
                 );
             }
             $this->cache['Mailinglists'] = $options;
-        } elseif(is_array($this->cache['Mailinglists'])) {
+        } elseif (is_array($this->cache['Mailinglists'])) {
             $options = $this->cache['Mailinglists'];
         } else {
             throw new \Exception('getMailinglists failed');
-        }  
+        }
         $fConfig['items'] = array_merge($fConfig['items'], $options);
     }
-    
+
     /**
      * get Example User
      * @param array $fConfig
@@ -119,8 +121,9 @@ class FlexFormHelper {
      * @return type
      * @throws \Exception
      */
-    public function getSubscriberFields(&$fConfig, $fObj) {        
-        if($this->openEmmService == null ) {
+    public function getSubscriberFields(&$fConfig, $fObj)
+    {
+        if ($this->openEmmService == null) {
             $this->Init();
         }
         $exclude = array(
@@ -143,15 +146,15 @@ class FlexFormHelper {
             'customer_id'
         );
         $defaultType = ":textfield:default";
-        if(!isset($this->cache['SubscriberFields'])) {
+        if (!isset($this->cache['SubscriberFields'])) {
             try {
                 $subscriber = $this->openEmmService->GetSubscriber(1);
             } catch (\SoapFault $ex) {
                 throw $ex;
             }
             $options = array();
-            foreach($subscriber->parameters as $key => $value) {
-                if(in_array($key, $exclude)) {
+            foreach ($subscriber->parameters as $key => $value) {
+                if (in_array($key, $exclude)) {
                     continue;
                 }
                 $options[] = array(
@@ -160,11 +163,11 @@ class FlexFormHelper {
                 );
             }
             $this->cache['SubscriberFields'] = $options;
-        } elseif(is_array($this->cache['SubscriberFields'])) {
+        } elseif (is_array($this->cache['SubscriberFields'])) {
             $options = $this->cache['SubscriberFields'];
         } else {
             throw new \Exception('getSubscriberFields failed');
         }
-        $fConfig['items'] = array_merge($fConfig['items'], $options);        
+        $fConfig['items'] = array_merge($fConfig['items'], $options);
     }
 }

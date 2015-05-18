@@ -2,35 +2,36 @@
 
 namespace Ideal\Openemm\Services;
 
-/* * *************************************************************
- *
- *  Copyright notice
- *
- *  (c) 2014 Markus Pircher <technik@idealit.com>, IDEAL
- *
- *  All rights reserved
- *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
- *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  This copyright notice MUST APPEAR in all copies of the script!
- * ************************************************************* */
+    /* * *************************************************************
+     *
+     *  Copyright notice
+     *
+     *  (c) 2014 Markus Pircher <technik@idealit.com>, IDEAL
+     *
+     *  All rights reserved
+     *
+     *  This script is part of the TYPO3 project. The TYPO3 project is
+     *  free software; you can redistribute it and/or modify
+     *  it under the terms of the GNU General Public License as published by
+     *  the Free Software Foundation; either version 3 of the License, or
+     *  (at your option) any later version.
+     *
+     *  The GNU General Public License can be found at
+     *  http://www.gnu.org/copyleft/gpl.html.
+     *
+     *  This script is distributed in the hope that it will be useful,
+     *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+     *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     *  GNU General Public License for more details.
+     *
+     *  This copyright notice MUST APPEAR in all copies of the script!
+     * ************************************************************* */
 
 /**
  * OpenEMM Service, aviable in other Extensions
  */
-class OpenEMMService {
+class OpenEMMService
+{
 
     /**
      * @var \Ideal\Openemm\Services\Api\WsseSoapClient $wsseSoapClient
@@ -47,11 +48,14 @@ class OpenEMMService {
      * @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager
      */
     public $objectManager = null;
-    
-     /**
+
+    /**
      * @param array $settings
+     * @return array
+     * @throws \Exception
      */
-    public function Init(array $settings = null) {
+    public function Init(array $settings = null)
+    {
         $this->objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
         if ($settings == null) {
             $configurationManager = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManager');
@@ -59,12 +63,12 @@ class OpenEMMService {
         }
         $this->settings = $settings;
         if (is_array($this->settings) && count($this->settings) > 0) {
-            $this->wsseSoapClient = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance("\\Ideal\\Openemm\\Services\\Api\\WsseSoapClient", 
-                    $this->settings['webservice']['wsdl'], 
-                    $this->settings['webservice']['username'], 
-                    $this->settings['webservice']['password'], 
-                    null, 
-                    $this->settings['webservice']['soapOption']);
+            $this->wsseSoapClient = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance("\\Ideal\\Openemm\\Services\\Api\\WsseSoapClient",
+                $this->settings['webservice']['wsdl'],
+                $this->settings['webservice']['username'],
+                $this->settings['webservice']['password'],
+                null,
+                $this->settings['webservice']['soapOption']);
         } else {
             throw new \Exception(print_r($settings, true));
         }
@@ -75,47 +79,49 @@ class OpenEMMService {
      * Get OpenEMM Soap Client
      * @return \Ideal\Openemm\Services\Api\WsseSoapClient $wsseSoapClient
      */
-    public function GetSoapClient() {
+    public function GetSoapClient()
+    {
         return $this->wsseSoapClient;
     }
-    
+
     /**
-     * 
+     *
      * @param int $subscriberId
-     * @return \Ideal\Openemm\Model\SubscriberApiModel
+     * @return \Ideal\Openemm\Domain\Model\Emm\Subscriber
      */
     public function GetSubscriber($subscriberId)
-    {        
+    {
         $subscriber = $this->wsseSoapClient->GetSubscriber(array("customerID" => intval($subscriberId)));
         return \Ideal\Openemm\Services\Api\Mapper\SubscriberMapper::MapFromSoap($subscriber);
     }
-    
+
     /**
      * Add Subscriber
-     * @param \Ideal\Openemm\Model\SubscriberApiModel $subscriberApiModel
+     * @param \Ideal\Openemm\Domain\Model\Emm\Subscriber $subscriberApiModel
      * @param array $mailinglists
-     * @return \Ideal\Openemm\Model\SubscriberApiModel
+     * @return \Ideal\Openemm\Domain\Model\Emm\Subscriber
      */
-    public function AddSubscriber(\Ideal\Openemm\Model\SubscriberApiModel $subscriberApiModel, array $mailinglists = null) {
-        $subscriber = \Ideal\Openemm\Services\Api\Mapper\SubscriberMapper::MapToSoap($subscriberApiModel);
+    public function AddSubscriber(\Ideal\Openemm\Domain\Model\Emm\Subscriber $subscriber, array $mailinglists = null)
+    {
+        $subscriberArray = \Ideal\Openemm\Services\Api\Mapper\SubscriberMapper::MapToSoap($subscriber);
         unset($subscriber['customerID']);
-        $subscriber['doubleCheck'] = true;
-        $subscriber['keyColumn'] = "email";
-        $subscriber['overwrite'] = false;
+        $subscriberArray['doubleCheck'] = true;
+        $subscriberArray['keyColumn'] = "email";
+        $subscriberArray['overwrite'] = false;
         $response = $this->wsseSoapClient->AddSubscriber($subscriber);
-        if($response->customerID != 0) {
-            $subscriberApiModel->customerID = $response->customerID; 
+        if ($response->customerID != 0) {
+            $subscriber->setCustomerID($response->customerID);
         }
-        
-        if($mailinglists != null && count($mailinglists) > 0) {
-            foreach($mailinglists as $listid) {
-                $this->SetSubscriberBinding($subscriberApiModel->customerID, $listid);
+
+        if ($mailinglists != null && count($mailinglists) > 0) {
+            foreach ($mailinglists as $listid) {
+                $this->SetSubscriberBinding($subscriber->getCustomerID(), $listid);
             }
         }
-        
-        return $subscriberApiModel;
+
+        return $subscriber;
     }
-    
+
     /**
      * Set or update Binding
      * @param int $customerID
@@ -126,7 +132,8 @@ class OpenEMMService {
      * @param string $remark
      * @param int $exitMailingID
      */
-    public function SetSubscriberBinding($customerID, $mailinglistID, $mediatype = 0, $status = 5, $userType = "W", $remark = "tx_openemm", $exitMailingID = 0) {
+    public function SetSubscriberBinding($customerID, $mailinglistID, $mediatype = 0, $status = 5, $userType = "W", $remark = "tx_openemm", $exitMailingID = 0)
+    {
         $request = array(
             'customerID' => $customerID,
             'mailinglistID' => $mailinglistID,
@@ -138,11 +145,12 @@ class OpenEMMService {
         );
         $this->wsseSoapClient->SetSubscriberBinding($request);
     }
-    
+
     /**
      * List all Mailinglists
      */
-    public function ListMailinglists() {
+    public function ListMailinglists()
+    {
         return $this->wsseSoapClient->ListMailinglists();
     }
 

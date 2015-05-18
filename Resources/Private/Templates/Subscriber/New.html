@@ -3,12 +3,13 @@
     <div id="message-container">
         <f:flashMessages renderMode="div" />
     </div>
+    <f:render partial="Alert" arguments="{alerts:alerts}" />
     <f:debug>{debug}</f:debug>
     <f:if condition="{step}">
         <f:switch expression="{step}">
             <f:case value="1">
                 <f:comment><f:render partial="FormErrors" arguments="{object:participant}" /></f:comment>
-                <f:form controller="Subscriber" name="subscriber" object="{participant}" class="form-horizontal" id="subscriber-form-step1">
+                <f:form controller="Subscriber" name="subscriber" object="{subscriber}" class="form-horizontal" id="subscriber-form-step1">
                     <f:if condition="{fields}">
                         <f:then>
                             <f:for each="{fields}" as="field">

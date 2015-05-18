@@ -29,63 +29,63 @@
             </trans-unit>
             
             <!-- Default Fields -->
-            <trans-unit id="fields.email">
+            <trans-unit id="subscriber.property.email">
                 <source>E-mail</source>
             </trans-unit>
-            <trans-unit id="fields.emailype">
+            <trans-unit id="subscriber.property.emailype">
                 <source>E-Mail Type</source>
             </trans-unit>
-            <trans-unit id="fields.gender">
+            <trans-unit id="subscriber.property.gender">
                 <source>Gender</source>
             </trans-unit>
-            <trans-unit id="fields.title">
+            <trans-unit id="subscriber.property.title">
                 <source>Title</source>
             </trans-unit>
-            <trans-unit id="fields.gender">
+            <trans-unit id="subscriber.property.gender">
                 <source>Gender</source>
             </trans-unit>
-            <trans-unit id="fields.firstname">
+            <trans-unit id="subscriber.property.firstname">
                 <source>First Name</source>
             </trans-unit>
-            <trans-unit id="fields.lastname">
+            <trans-unit id="subscriber.property.lastname">
                 <source>Last Name</source>
             </trans-unit>
             
             <!-- Optional Fields -->
-            <trans-unit id="fields.address">
+            <trans-unit id="subscriber.property.address">
                 <source>Address</source>
             </trans-unit>
-            <trans-unit id="fields.zip">
+            <trans-unit id="subscriber.property.zip">
                 <source>Zip</source>
             </trans-unit>
-            <trans-unit id="fields.city">
+            <trans-unit id="subscriber.property.city">
                 <source>City</source>
             </trans-unit>
-            <trans-unit id="fields.country">
+            <trans-unit id="subscriber.property.country">
                 <source>Country</source>
             </trans-unit>
-            <trans-unit id="fields.zone">
+            <trans-unit id="subscriber.property.zone">
                 <source>Zone</source>
             </trans-unit>
-            <trans-unit id="fields.region">
+            <trans-unit id="subscriber.property.region">
                 <source>Zone</source>
             </trans-unit>
-            <trans-unit id="fields.phone">
+            <trans-unit id="subscriber.property.phone">
                 <source>Phone</source>
             </trans-unit>
-            <trans-unit id="fields.fax">
+            <trans-unit id="subscriber.property.fax">
                 <source>Fax</source>
             </trans-unit>
-            <trans-unit id="fields.mobile">
+            <trans-unit id="subscriber.property.mobile">
                 <source>Mobile</source>
             </trans-unit>
-            <trans-unit id="fields.www">
+            <trans-unit id="subscriber.property.www">
                 <source>Website</source>
             </trans-unit>
-            <trans-unit id="fields.company">
+            <trans-unit id="subscriber.property.company">
                 <source>company</source>
             </trans-unit>
-            <trans-unit id="fields.vat">
+            <trans-unit id="subscriber.property.vat">
                 <source>VAT</source>
             </trans-unit>
                
@@ -105,16 +105,16 @@
             <trans-unit id="pleaceSelect">
                 <source> -- pleace select -- </source>
             </trans-unit>
-            <trans-unit id="fields.title.1">
+            <trans-unit id="subscriber.property.title.1">
                 <source>Mr.</source>
             </trans-unit>
-            <trans-unit id="fields.title.2">
+            <trans-unit id="subscriber.property.title.2">
                 <source>Mrs.</source>
             </trans-unit>
-            <trans-unit id="fields.title.3">
+            <trans-unit id="subscriber.property.title.3">
                 <source>Family</source>
             </trans-unit>
-            <trans-unit id="fields.title.4">
+            <trans-unit id="subscriber.property.title.4">
                 <source>Company</source>
             </trans-unit>            
             
@@ -154,9 +154,6 @@
             </trans-unit>
             <trans-unit id="formErrorDefault">
                 <source>Please try again later</source>
-            </trans-unit>            
-            <trans-unit id="formErrorMaxParticipants">
-                <source>Exceeded maximum number of participants</source>
             </trans-unit>
             <trans-unit id="formErrorFilesize">
                 <source>Image to Large</source>
@@ -164,13 +161,10 @@
             <trans-unit id="formErrorFormat">
                 <source>File Format not allowed</source>
             </trans-unit>
-            
-            <trans-unit id="mailSubjectAdminNewSubscriberNotification">
-                <source>New Participan</source>
-            </trans-unit>            
-            <trans-unit id="mailSubjectNewSubscriberNotification">
-                <source>Thanks</source>
+            <trans-unit id="formFieldErrorTitle">
+                <source>Pleace control your Data</source>
             </trans-unit>
+
         </body>
     </file>
 </xliff>

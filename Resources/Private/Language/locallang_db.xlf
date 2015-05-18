@@ -27,6 +27,23 @@
             <trans-unit id="tx_openemm_domain_model_subscriber.parameters">
                 <source>Parameters</source>
             </trans-unit>
+
+            <trans-unit id="tx_openemm.tx_extbase_type">
+                <source>OpenEMM</source>
+            </trans-unit>
+            <trans-unit id="fe_users.tx_extbase_type.Tx_openemm_Feusers">
+                <source>OpenEMM</source>
+            </trans-unit>
+            <trans-unit id="fe_users.emm_id">
+                <source>OpenEMM ID</source>
+            </trans-unit>
+            <trans-unit id="fe_users.emm_last_synchronisation">
+                <source>Last synchronisation</source>
+            </trans-unit>
+
+            <trans-unit id="taps.openemm">
+                <source>OpenEMM</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>

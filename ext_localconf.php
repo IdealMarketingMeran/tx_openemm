@@ -8,9 +8,11 @@ if (!defined('TYPO3_MODE')) {
 	'Pi1',
 	array(
 		'Subscriber' => 'new, create, confirm, update, unsubscribe',
+        'Mailinglist' => 'list, new, create, edit, update',
 	),
 	// non-cacheable actions
 	array(
 		'Subscriber' => 'new, create, confirm, update, unsubscribe',
+        'Mailinglist' => 'list, new, create, edit, update',
 	)
 );

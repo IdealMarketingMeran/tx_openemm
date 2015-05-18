@@ -1,12 +1,12 @@
 <?php
 
-namespace Ideal\Openemm\Validation;
+namespace Ideal\Openemm\Domain\Model;
 
 /***************************************************************
  *
  *  Copyright notice
  *
- *  (c) 2014 Markus Pircher <technik@idealit.com>, IDEAL
+ *  (c) 2015 Markus Pircher <technik@idealit.com>, IDEAL GmBh
  *
  *  All rights reserved
  *
@@ -27,15 +27,48 @@ namespace Ideal\Openemm\Validation;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
-abstract class ValidationError
+class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
 {
-    const ISEMPTY = 1;
-    const EMAIL = 2;
-    const NUMBERIC = 3;
-    const CHECKED = 4;
-    const TOOMANY = 5;
-    const FORMAT = 6;
-    const FILESIZE = 7;
-    const LENGTH = 8;
+    /**
+     * @var int
+     */
+    protected $emmId;
+
+    /**
+     * @var \Datetime
+     */
+    protected $emmLastSynchronisation;
+
+    /**
+     * @return int
+     */
+    public function getEmmId()
+    {
+        return $this->emmId;
+    }
+
+    /**
+     * @param int $emmId
+     */
+    public function setEmmId($emmId)
+    {
+        $this->emmId = $emmId;
+    }
+
+    /**
+     * @return \Datetime
+     */
+    public function getEmmLastSynchronisation()
+    {
+        return $this->emmLastSynchronisation;
+    }
+
+    /**
+     * @param \Datetime $emmLastSynchronisation
+     */
+    public function setEmmLastSynchronisation($emmLastSynchronisation)
+    {
+        $this->emmLastSynchronisation = $emmLastSynchronisation;
+    }
+
 }

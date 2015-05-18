@@ -11,6 +11,12 @@ config.tx_extbase {
                     tableName = static_countries
                 }
             }
+            Ideal\Openemm\Domain\Model\Feusers {
+                mapping {
+                    tableName = fe_users
+                    recordType =
+                }
+            }
         }
     }
     objects {

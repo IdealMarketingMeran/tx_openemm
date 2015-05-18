@@ -3,8 +3,13 @@
 namespace Ideal\Openemm\Controller;
 
 use \TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use \TYPO3\CMS\Core\Utility\GeneralUtility;
+use \Ideal\Openemm\Validation\Validator;
+use \Ideal\Openemm\Validation\SubscriberValidator;
+use \Ideal\Openemm\Validation\ValidationError;
+use TYPO3\CMS\Core\Utility\PathUtility;
 
-/* * *************************************************************
+/***************************************************************
  *
  *  Copyright notice
  *
@@ -27,14 +32,15 @@ use \TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  *  GNU General Public License for more details.
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
- * ************************************************************* */
+ ***************************************************************/
 
 /**
  * Description of SubscriberController
  *
  * @author Markus Pircher
  */
-class SubscriberController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
+class SubscriberController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
+{
 
     /**
      * Utilitys
@@ -45,18 +51,48 @@ class SubscriberController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContr
     protected $div = NULL;
 
     /**
+     * FrontendUser Utility
+     *
+     * @var \Ideal\Openemm\Utility\FrontendUserUtility
+     * @inject
+     */
+    protected $frontendUserUtility = NULL;
+
+    /**
+     * OpenEMM Service
+     * @var \Ideal\Openemm\Services\OpenEMMService
+     */
+    private $openEmmService = null;
+
+    /**
+     * Errors
+     *
+     * @var array
+     */
+    private $errorArray;
+
+    /**
+     * Errors
+     *
+     * @var array
+     */
+    private $errorFieldsArray = array();
+
+    /**
      * Get zones from Isocode
-     * 
+     *
      * @param string $countryIsoA3
      * @ignorevalidation $countryIsoA3
      * @return string JSON Zone
      */
-    public function getZoneAjaxAction($countryIsoA3) {
+    public function getZoneAjaxAction($countryIsoA3)
+    {
+        /** @var \Ideal\Openemm\Domain\Repository\CountryZoneRepository $zoneRepository */
         $zoneRepository = $this->objectManager->get('Ideal\\Openemm\\Domain\\Repository\\CountryZoneRepository');
         $zones = $zoneRepository->findByIsoCodeA3($countryIsoA3);
         $options = array();
+        /** @var \Ideal\Openemm\Domain\Model\CountryZone $zone */
         foreach ($zones as $zone) {
-            //$options[$zone->getUid()] = $zone->getLocalName();
             $options[] = array(
                 'key' => $zone->getIsoCode(),
                 'value' => $zone->getLocalName()
@@ -67,136 +103,163 @@ class SubscriberController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContr
 
     /**
      * Form
-     * 
+     *
      * @param int $step
      * @ignorevalidation $participant
      * @return void
      */
-    public function newAction($step = 1) {
-        $error = array();
+    public function newAction($step = 1)
+    {
         $debug = array();
-        //$this->request->getArguments();
 
         //Step 2
-        if ($step == 2) {
-            $errorMsg = null;
-            if (!$this->request->hasArgument("control")) {
-                $errorMsg = LocalizationUtility::translate('fatalFormError', 'openemm') != NULL ? LocalizationUtility::translate('fatalFormError', 'openemm') : 'fatalFormError:newAction' . $this->request->count();
+        if ($step == 2 && $this->request->hasArgument("subscriber")) {
+            $isValideSubsciber = $this->validateSubscriber($this->request->getArgument("subscriber"));
+            if (!$isValideSubsciber) {
+                $step = 1;
+                //$debug[] = $this->request->getArgument("subscriber");
             } else {
-                $errorMsg = \Ideal\Openemm\Validation\Validator::validateFormSecurity($this->request->getArgument("control"));
+                //Todo DataControl
+
             }
-            if ($errorMsg !== null) {
-                $this->controllerContext->getFlashMessageQueue()->enqueue(
-                        $this->objectManager->get(
-                                'Ideal\\Openemm\\Messaging\\FlashMessage', $errorMsg, LocalizationUtility::translate('fatalFormErrorTitle', 'openemm'), \Ideal\Openemm\Messaging\FlashMessage::ERROR
-                        )
-                );
-            } else {
-                //$valideFields = \Ideal\Openemm\Validation\Validator::validateParticipant($participant, $this->settings);
-                if (is_array($valideFields) && count($valideFields) > 0) {
-                    $flashMessageTitle = LocalizationUtility::translate('formErrorDefaultTitle', 'openemm') != NULL ? LocalizationUtility::translate('formErrorDefaultTitle', 'openemm') : 'formErrorDefaultTitle';
-                    $flashMessage = "<ul>";
-                    foreach ($valideFields as $field => $errorEnum) {
-                        switch ($errorEnum) {
-                            case \Ideal\Contest\Validation\ValidationError::ISEMPTY:
-                                $error[$field]["msg"] = LocalizationUtility::translate('formErrorEmpty', 'openemm') != NULL ? LocalizationUtility::translate('formErrorEmpty', 'openemm') : 'formErrorEmpty';
-                                break;
-                            case \Ideal\Contest\Validation\ValidationError::EMAIL:
-                                $error[$field]["msg"] = LocalizationUtility::translate('formErrorEmail', 'openemm') != NULL ? LocalizationUtility::translate('formErrorEmail', 'openemm') : 'formErrorEmail';
-                                break;
-                            case \Ideal\Contest\Validation\ValidationError::CHECKED:
-                                $error[$field]["msg"] = LocalizationUtility::translate('formErrorChecked', 'openemm') != NULL ? LocalizationUtility::translate('formErrorChecked', 'openemm') : 'formErrorChecked';
-                                break;
-                            case \Ideal\Contest\Validation\ValidationError::NUMBERIC:
-                                $error[$field]["msg"] = LocalizationUtility::translate('formErrorNumberic', 'openemm') != NULL ? LocalizationUtility::translate('formErrorNumberic', 'openemm') : 'formErrorNumberic';
-                                break;
-                            case \Ideal\Contest\Validation\ValidationError::TOOMANY:
-                                $error[$field]["msg"] = LocalizationUtility::translate('formErrorTooMany', 'openemm') != NULL ? LocalizationUtility::translate('formErrorTooMany', 'openemm') : 'formErrorTooMany';
-                                break;
-                            case \Ideal\Contest\Validation\ValidationError::FORMAT:
-                                $error[$field]["msg"] = LocalizationUtility::translate('formErrorFormat', 'openemm') != NULL ? LocalizationUtility::translate('formErrorFormat', 'openemm') : 'formErrorFormat';
-                                break;
-                            default:
-                                $error[$field]["msg"] = "[$error[$field].$errorEnum]: " . LocalizationUtility::translate('formErrorDefault', 'openemm') != NULL ? LocalizationUtility::translate('formErrorDefault', 'openemm') : 'formErrorDefault';
-                        }
-                        $error[$field]["hasError"] = true;
-                        #$error[$field]["class"] = $this->settings['booking']['new']['errorClass'];
-                        $fielLC = \TYPO3\CMS\Core\Utility\GeneralUtility::camelCaseToLowerCaseUnderscored($field);
-                        $flashMessage .= "<li>" . LocalizationUtility::translate('fields.' . $fielLC, 'openemm') . " ($fielLC): " . $error[$field]["msg"] . "</li>";
-                    }
-                    $flashMessage .= "</ul>";
-                    $this->controllerContext->getFlashMessageQueue()->enqueue(
-                            $this->objectManager->get(
-                                    'Ideal\\Openemm\\Messaging\\FlashMessage', $flashMessage, $flashMessageTitle, \Ideal\Contest\Messaging\FlashMessage::ERROR
-                            )
-                    );
-                    $step = 1;
-                } else {
-                    //fields
-                    if (isset($this->settings['new']['subscriber']['fields']) && !empty($this->settings['new']['subscriber']['fields'])) {
-                        $fields = $this->div->prepareFields($this->settings, $error, 'new');
-                        $fields = $this->div->mappingFields($fields['fields'], $this->request->getArguments());
-                        $this->view->assign('fields', $fields);
-                        $debug['confirmfields'] = $fields;
-                        $debug['getarguments'] = $this->request->getArguments();
-                        $debug['arguments'] = $this->arguments;
-                    }
-                }
-            }
+        } elseif($step == 2 && !$this->request->hasArgument("subscriber")) {
+            $step = 1;
+            $this->addAlertMessage(LocalizationUtility::translate('noDataText', 'openemm'), LocalizationUtility::translate('noDataTitle', 'openemm'), \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
         }
 
         //Step 1
         if ($step == 1) {
             //fields
             if (isset($this->settings['new']['subscriber']['fields']) && !empty($this->settings['new']['subscriber']['fields'])) {
-                $fields = $this->div->prepareFields($this->settings, $error, 'new');
-                $this->view->assign('fields', $fields['fields']);
-                $this->view->assign('required', $fields['required']);
+                $fields = $this->div->prepareFields($this->settings, $this->errorFieldsArray, 'new');
+                $fields['fields'] = $this->div->mappingFields($fields['fields'], $this->request->getArguments());
+                $this->view->assignMultiple(array(
+                    'fields' => $fields['fields']
+                ));
                 $debug[] = $fields;
             }
         }
-        if ($step == 1 || $step == 2) {
-            $controlPart1 = time();
-            $controlPart2 = rand(1000, 1000000);
-            $controlString = $controlPart1 . '.' . $controlPart2;
-            $controlHash = md5($controlPart1 . $controlPart2 . $GLOBALS["TYPO3_CONF_VARS"]['SYS']['encryptionKey']);
-
-            if ($this->request->hasArgument("transId")) {
-                $transId = $this->request->getArgument("transId");
-            } else {
-                $transId = $controlHash;
-            }
-            $this->view->assign('transId', $transId);
-            $this->view->assign('controlString', $controlString);
-            $this->view->assign('controlHash', $controlHash);
-            $this->view->assign('settings', $this->settings);
-            $this->view->assign('step', intval($step));
-            $this->view->assign('nextStep', intval($step + 1));
-        }
-
+        $this->assignFormSecurity();
+        $this->view->assignMultiple(array(
+            'settings' => $this->settings,
+            'step' => intval($step),
+            'nextStep' => intval($step + 1),
+            'alerts' => $this->errorArray
+        ));
         $this->view->assign('debug', $debug);
-        $this->view->assign('participant', $participant);
-        $this->view->assign('openemm', $openemms);
     }
-    
+
     /**
      * Send User to OpenEMM
      */
-    public function createAction() {
-        
+    public function createAction()
+    {
+        //Todo Validation!!
+        $this->openEmmService->AddSubscriber(null);
     }
-    
+
     /**
      * Confimation and Update Subscriber
-     * 
+     *
      * @param string $authCode
      */
-    public function confirmAction($authCode) {
-        if(\Ideal\Openemm\Validation\Validator::validateAuthcodeString($authCode)) {
+    public function confirmAction($authCode)
+    {
+        if (\Ideal\Openemm\Validation\Validator::validateAuthcodeString($authCode)) {
             //todo activate User...
         } else {
             //todo error...
         }
+    }
+
+    /**
+     * Make Security Info Fields for Form
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
+     */
+    private function assignFormSecurity()
+    {
+        $controlPart1 = time();
+        $controlPart2 = rand(1000, 1000000);
+        $controlString = $controlPart1 . '.' . $controlPart2;
+        $controlHash = md5($controlPart1 . $controlPart2 . $GLOBALS["TYPO3_CONF_VARS"]['SYS']['encryptionKey']);
+
+        if ($this->request->hasArgument("transId")) {
+            $transId = $this->request->getArgument("transId");
+        } else {
+            $transId = $controlHash;
+        }
+        $this->view->assignMultiple(array(
+            'transId' => $transId,
+            'controlString' => $controlString,
+            'controlHash' => $controlHash,
+        ));
+    }
+
+    /**
+     * Add Error
+     * @param string $message
+     * @param string $title
+     * @param int $type
+     */
+    private function addAlertMessage($message, $title, $type)
+    {
+        $this->errorArray[] = array(
+            'title' => $title,
+            'message' => $message,
+            'type' => $type
+        );
+    }
+
+    /**
+     * Validate Subscriber
+     * @param array $subscriber
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
+     * @return bool
+     */
+    private function validateSubscriber(array $subscriber)
+    {
+        $validateFormSecurity = Validator::validateFormSecurity($this->request->getArgument("control"));
+        if ($validateFormSecurity === null) {
+            $subscriberValidationData = SubscriberValidator::validateSubscriber($subscriber, $this->settings);
+            if ($subscriberValidationData !== true) {
+                $errorMessage = "";
+                foreach ($subscriberValidationData as $field => $error) {
+                    $fieldPropertyName = $field;
+                    if(strpos($field, ":") > 0) {
+                        $fieldPropertyName = GeneralUtility::trimExplode(":", $field)[0];
+                    }
+                    $fieldName = LocalizationUtility::translate('subscriber.property.' . GeneralUtility::camelCaseToLowerCaseUnderscored($fieldPropertyName), 'openemm');
+                    switch ($error) {
+                        case ValidationError::ISEMPTY:
+                            $errorMsg = LocalizationUtility::translate('formErrorEmpty', 'openemm');
+                            $this->errorFieldsArray[$field] = $errorMsg != NULL ? $errorMsg : 'formErrorEmpty';
+                            break;
+                        case ValidationError::EMAIL:
+                            $errorMsg = LocalizationUtility::translate('formErrorEmail', 'openemm');
+                            $this->errorFieldsArray[$field] = $errorMsg != NULL ? $errorMsg : 'formErrorEmail';
+                            break;
+                        case ValidationError::CHECKED:
+                            $errorMsg = LocalizationUtility::translate('formErrorChecked', 'openemm');
+                            $this->errorFieldsArray[$field] = $errorMsg != NULL ? $errorMsg : 'formErrorChecked';
+                            break;
+                        case ValidationError::LENGTH:
+                            $errorMsg = LocalizationUtility::translate('formErrorLength', 'openemm');
+                            $this->errorFieldsArray[$field] = $errorMsg != NULL ? $errorMsg : 'formErrorLength';
+                            break;
+                        default:
+                            $errorMsg = LocalizationUtility::translate('formErrorDefault', 'openemm');
+                            $this->errorFieldsArray[$field] = "[FORM FIELD ERROR " . $error . "]: " . $errorMsg != NULL ? $errorMsg : 'formErrorDefault';
+                    }
+                    $errorMessage .= "<li>" . ($fieldName != null ? $fieldName : 'subscriber.property.' . $field) . ": " . $this->errorFieldsArray[$field] . "</li>";
+                }
+                $this->addAlertMessage("<ul>" . $errorMessage . "</ul>", LocalizationUtility::translate('formFieldErrorTitle', 'openemm'), \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
+                return false;
+            }
+        } else {
+            $this->addAlertMessage($validateFormSecurity, LocalizationUtility::translate('fatalFormErrorTitle', 'openemm'), \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
+            return false;
+        }
+        return true;
     }
 
 }

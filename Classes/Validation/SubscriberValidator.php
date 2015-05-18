@@ -31,8 +31,44 @@ use TYPO3\CMS\Core\Utility\PathUtility;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Validator
+class SubscriberValidator
 {
+
+    /**
+     * Validate Subscriber Data
+     * 
+     * @param array $arguments
+     * @param array $settings
+     * @return array|bool (has error array with fields has a error)
+     */
+    public static function validateSubscriber(array $arguments, array $settings)
+    {
+        $fields = array();
+        $ret = array();
+        if (is_string($settings['new']['subscriber']['required'])) {
+            $fields = explode(',', $settings['new']['subscriber']['required']);
+        }
+        //required Fields
+        foreach ($fields as $field) {
+            if (!isset($arguments[$field])) {
+                $ret[$field] = ValidationError::ISEMPTY;
+                continue;
+            } elseif (empty($arguments[$field])) {
+                $ret[$field] = ValidationError::ISEMPTY;
+                continue;
+            }
+
+            if ($field == "email" && filter_var($arguments[$field], FILTER_VALIDATE_EMAIL) === false) {
+                $ret[$field] = ValidationError::EMAIL;
+                continue;
+            }
+        }
+        if (count($ret) > 0) {
+            return $ret;
+        }
+        return true;
+    }
+
     /**
      * Validate Form Security
      *
@@ -58,4 +94,30 @@ class Validator
         }
         return $errorMsg;
     }
+
+    /**
+     * Generate User Authstring
+     * @param int $userId
+     * @return string
+     */
+    public static function getUserAuthcodeString($userId)
+    {
+        return '$' . $userId . '$' . md5($userId . $GLOBALS["TYPO3_CONF_VARS"]['SYS']['encryptionKey']);
+    }
+
+    /**
+     * Validate Authstring
+     * @param string $authcode
+     * @return boolean
+     */
+    public static function validateAuthcodeString($authcode)
+    {
+        $array = explode('$', $authcode);
+        $controllHash = md5($array[0] . $GLOBALS["TYPO3_CONF_VARS"]['SYS']['encryptionKey']);
+        if ($array[0] === $controllHash) {
+            return true;
+        }
+        return false;
+    }
+
 }

@@ -1,12 +1,12 @@
 <?php
 
-namespace Ideal\Openemm\Domain\Model;
+namespace Ideal\Openemm\Controller;
 
-/* * *************************************************************
+/***************************************************************
  *
  *  Copyright notice
  *
- *  (c) 2014 Markus Pircher <technik@idealit.com>, IDEAL
+ *  (c) 2015 Markus Pircher <technik@idealit.com>, IDEAL GmBh
  *
  *  All rights reserved
  *
@@ -25,23 +25,10 @@ namespace Ideal\Openemm\Domain\Model;
  *  GNU General Public License for more details.
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
- * ************************************************************* */
+ ***************************************************************/
 
-/**
- * Description of SubscriberModel
- *
- * @author Markus Pircher
- */
-class SubscriberApiModel {
-    /**
-     * Id of customer
-     * @var int $customerID
-     */
-    public $customerID;
-    
-    /**
-     * Parrameter of customer
-     * @var array $parameters
-     */
-    public $parameters;
+
+class MailinglistController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
+{
+
 }

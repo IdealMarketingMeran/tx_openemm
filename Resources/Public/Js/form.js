@@ -50,4 +50,5 @@ $(document).ready(function () {
         });
         return false;
     });
+    setTimeout(function() {$(".tx-openemm #field-country").trigger('change')}, 100);
 });

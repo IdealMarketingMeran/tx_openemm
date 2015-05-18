@@ -6,7 +6,7 @@ use \TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 
-/* * *************************************************************
+/***************************************************************
  *
  *  Copyright notice
  *
@@ -29,28 +29,31 @@ use TYPO3\CMS\Core\Utility\PathUtility;
  *  GNU General Public License for more details.
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
- * ************************************************************* */
+ ***************************************************************/
 
 /**
  * Functions
  */
-class Div {
-    
+class Div
+{
+
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager 
+     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
      * @inject
      */
     private $objectManager = null;
 
     /**
      * Prepare Participants Fields
-     * 
+     *
      * @param array $settings
      * @param array $fieldErrors
      * @param string $settingspart
+     * @param array $request
      * @return array
      */
-    public function prepareFields(array $settings, array $fieldErrors, $settingspart = 'new', $request = array()) {
+    public function prepareFields(array $settings, array $fieldErrors, $settingspart = 'new', $request = array())
+    {
         $fieldsReturn = array('fields' => array(), 'required' => array());
 
         $ofields = explode(',', $settings[$settingspart]['subscriber']['fields']);
@@ -63,8 +66,8 @@ class Div {
         foreach ($ofields as $field) {
             $fieldInfo = explode(':', $field);
             $fields[$fieldInfo[0]]['property'] = $fieldInfo[0];
-            $fieldLabel = LocalizationUtility::translate('fields.' . GeneralUtility::camelCaseToLowerCaseUnderscored($fieldInfo[0]), 'openemm');
-            $fields[$fieldInfo[0]]['name'] = !empty($fieldLabel) ? $fieldLabel : $fieldInfo[0] ;
+            $fieldLabel = LocalizationUtility::translate('subscriber.property.' . GeneralUtility::camelCaseToLowerCaseUnderscored($fieldInfo[0]), 'openemm');
+            $fields[$fieldInfo[0]]['name'] = !empty($fieldLabel) ? $fieldLabel : $fieldInfo[0];
 
             //Fieldtype
             if (count($fieldInfo) > 1) {
@@ -84,7 +87,7 @@ class Div {
                 if ($fieldInfo[0] == 'title') {
                     $options[0] = LocalizationUtility::translate('pleaceSelect', 'openemm');
                     for ($i = 1; $i < 50; $i++) {
-                        $selectName = LocalizationUtility::translate('fields.' . GeneralUtility::camelCaseToLowerCaseUnderscored($fieldInfo[0]) . '.' . $i, 'openemm');
+                        $selectName = LocalizationUtility::translate('subscriber.property.' . GeneralUtility::camelCaseToLowerCaseUnderscored($fieldInfo[0]) . '.' . $i, 'openemm');
                         if ($selectName != NULL) {
                             $options[$i] = $selectName;
                         } else {
@@ -92,16 +95,16 @@ class Div {
                         }
                     }
                 }
-                if($fieldInfo[0] == 'country' || $fieldInfo[0] == 'region' || $fieldInfo[0] == 'zone')
+                /** @var \SJBR\StaticInfoTables\Domain\Repository\CountryRepository $countryRepository */
+                if ($fieldInfo[0] == 'country' || $fieldInfo[0] == 'region' || $fieldInfo[0] == 'zone')
                     $countryRepository = $this->objectManager->get('SJBR\\StaticInfoTables\\Domain\\Repository\\CountryRepository');
-                
+
                 //Country
                 if ($fieldInfo[0] == 'country') {
                     $options[0] = LocalizationUtility::translate('pleaceSelect', 'openemm');
                     $countrys = $countryRepository->findAll();
-
-                    foreach($countrys as $country) {
-                        //$options[$country->getUid()] = $country->getShortNameLocal();
+                    /** @var \Ideal\Openemm\Domain\Model\Country  $country */
+                    foreach ($countrys as $country) {
                         $options[$country->getIsoCodeA3()] = $country->getShortNameLocal();
                     }
                     $fields[$fieldInfo[0]]['options'] = $options;
@@ -109,14 +112,15 @@ class Div {
                 //Region-Zone
                 //$request['country'] = "ITA";
                 if ($fieldInfo[0] == 'region' || $fieldInfo[0] == 'zone') {
-                    $options[0] = LocalizationUtility::translate('pleaceSelect', 'openemm'); 
-                    if(count($request) > 0 && isset($request['country'])) {                  
+                    $options[0] = LocalizationUtility::translate('pleaceSelect', 'openemm');
+                    if (count($request) > 0 && isset($request['country'])) {
 
                         //$country = $countryRepository->findAllOrderedBy("isoCodeA3");
 
                         $zoneRepository = $this->objectManager->get('Ideal\\Openemm\\Domain\\Repository\\CountryZoneRepository');
                         $zones = $zoneRepository->findByIsoCodeA3($request['country']);
-                        foreach($zones as $zone) {
+                        /** @var \Ideal\Openemm\Domain\Model\CountryZone $zone */
+                        foreach ($zones as $zone) {
                             //$options[$zone->getUid()] = $zone->getLocalName();
                             $options[$zone->getIsoCode()] = $zone->getLocalName();
                         }
@@ -152,28 +156,35 @@ class Div {
     }
 
     /**
-     * Paping Values to Field Array
-     * 
+     * Mapping Values to Field Array
+     *
      * @param array $fields
      * @param array $arguments
+     * @return array
      */
-    public function mappingFields(array $fields, array $arguments) {
-        if(array_key_exists('subscriber', $arguments)) {
+    public function mappingFields(array $fields, array $arguments)
+    {
+        //var_dump($fields);
+        if (array_key_exists('subscriber', $arguments)) {
+            /** @var \SJBR\StaticInfoTables\Domain\Repository\CountryRepository $countryRepository */
             foreach ($fields as $name => $field) {
-                if(is_array($arguments['subscriber']) && array_key_exists($name, $arguments['subscriber']))
-                {
-                    if($name == 'country' || $name == 'region' || $name == 'zone')
+                if(strpos($name, ":") > 0) {
+                    $name = GeneralUtility::trimExplode(":", $name)[0];
+                }
+                var_dump($arguments['subscriber'][$name]);
+                if (array_key_exists($name, $arguments['subscriber'])) {
+                    if ($name == 'country' || $name == 'region' || $name == 'zone')
                         $countryRepository = $this->objectManager->get('Ideal\\Openemm\\Domain\\Repository\\CountryRepository');
-                    if($name == 'country') {
+                    if ($name == 'country') {
                         $country = $countryRepository->findByIsoCodeA3($arguments['subscriber'][$name])->getFirst();
                         $fields[$name]['value'] = $country->getShortNameLocal();
-                    } elseif($name == 'region' || $name == 'zone') {
+                    } elseif ($name == 'region' || $name == 'zone') {
                         $zoneRepository = $this->objectManager->get('Ideal\\Openemm\\Domain\\Repository\\CountryZoneRepository');
                         $zone = $zoneRepository->findByIsoCodeA3($arguments['subscriber']['country'])->getFirst();
                         $fields[$name]['value'] = $zone->getLocalName();
-                    } elseif($name == 'title') {
+                    } elseif ($name == 'title') {
                         $fields[$name]['value'] = LocalizationUtility::translate('fields.title.' . $arguments['subscriber'][$name], 'openemm');
-                    } elseif($name == 'gender') {
+                    } elseif ($name == 'gender') {
                         $gender = $arguments['subscriber'][$name] == 0 ? LocalizationUtility::translate('male', 'openemm') : LocalizationUtility::translate('female', 'openemm');
                         $fields[$name]['value'] = $gender;
                     } else {
@@ -185,18 +196,6 @@ class Div {
             $fields['ERROR']['argument'] = $arguments;
         }
         return $fields;
-    }
-
-    /**
-     * Return current logged in fe_user
-     *
-     * @return object
-     */
-    public function getCurrentUser() {
-        if (!is_array($GLOBALS['TSFE']->fe_user->user)) {
-            return NULL;
-        }
-        return $this->feusersRepository->findByUid($GLOBALS['TSFE']->fe_user->user['uid']);
     }
 
 }

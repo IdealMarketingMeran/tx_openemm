@@ -1,0 +1,36 @@
+<f:for each="{alerts}" as="alert">
+    <f:switch expression="{alert.type}">
+        <f:case value="-1">
+
+            <div class="alert alert-info alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>{alert.title}</strong> <f:format.html>{alert.message}</f:format.html>
+            </div>
+
+        </f:case>
+        <f:case value="0">
+
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>{alert.title}</strong> <f:format.html>{alert.message}</f:format.html>
+            </div>
+
+        </f:case>
+        <f:case value="1">
+
+            <div class="alert alert-warning alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>{alert.title}</strong> <f:format.html>{alert.message}</f:format.html>
+            </div>
+
+        </f:case>
+        <f:case value="2">
+
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>{alert.title}</strong> <f:format.html>{alert.message}</f:format.html>
+            </div>
+
+        </f:case>
+    </f:switch>
+</f:for>

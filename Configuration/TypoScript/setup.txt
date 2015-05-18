@@ -1,8 +1,8 @@
 plugin.tx_openemm {
     view {
         templateRootPath = {$plugin.tx_openemm.view.templateRootPath}
-	partialRootPath = {$plugin.tx_openemm.view.partialRootPath}
-	layoutRootPath = {$plugin.tx_openemm.view.layoutRootPath}
+	    partialRootPath = {$plugin.tx_openemm.view.partialRootPath}
+	    layoutRootPath = {$plugin.tx_openemm.view.layoutRootPath}
     }
     persistence {
         storagePid = {$plugin.tx_openemm.persistence.storagePid}
@@ -101,8 +101,7 @@ tx_openemm_pi1_ajax {
   }
   10 < styles.content.get
   10 {
-     select.where = colpos = 0
-     select.andWhere = list_type='openemm_pi1'
+     select.where = list_type='openemm_pi1'
   }
 }
 [globalVar = GP:type = 2415377]

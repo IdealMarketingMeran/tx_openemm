@@ -1,0 +1,22 @@
+{
+  "name": "ideal/openemm",
+  "type": "typo3-cms-extension",
+  "description": "OpenEMM Extension",
+  "homepage": "http://www.idealit.com",
+  "license": ["GPL-2.0+"],
+  "version": "0.0.2",
+  "authors": [
+    {
+      "name": "Markus Pircher",
+      "email": "technik@idealit.com",
+      "homepage": "https://www.idealit.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "typo3/cms-core": ">=6.2.10,<8.0"
+  },
+  "autoload": {
+    "classmap": ["Classes"]
+  }
+}

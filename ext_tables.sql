@@ -39,3 +39,14 @@ CREATE TABLE tx_openemm_domain_model_subscriber (
         KEY language (l10n_parent,sys_language_uid)
 
 );
+
+#
+# Table structure for table 'fe_users'
+#
+CREATE TABLE fe_users (
+  emm_id int(11) DEFAULT '0' NOT NULL,
+  emm_last_synchronisation int(11) DEFAULT '0' NOT NULL,
+	tx_extbase_type varchar(255) DEFAULT '' NOT NULL,
+
+	KEY emmid (emm_id),
+);
