@@ -131,8 +131,8 @@ class SubscriberController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContr
         if ($step == 1) {
             //fields
             if (isset($this->settings['new']['subscriber']['fields']) && !empty($this->settings['new']['subscriber']['fields'])) {
-                $fields = $this->div->prepareFields($this->settings, $this->errorFieldsArray, 'new');
-                $fields['fields'] = $this->div->mappingFields($fields['fields'], $this->request->getArguments());
+                $fields = $this->prepareFields($this->settings, $this->errorFieldsArray, 'new');
+                $fields['fields'] = $this->mappingFields($fields['fields'], $this->request->getArguments());
                 $this->view->assignMultiple(array(
                     'fields' => $fields['fields']
                 ));
@@ -262,4 +262,162 @@ class SubscriberController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContr
         return true;
     }
 
+    /**
+     * Prepare Subscriber Fields
+     *
+     * @param array $settings
+     * @param array $fieldErrors
+     * @param string $settingsPart
+     * @param array $request
+     * @return array
+     */
+    public function prepareFields(array $settings, array $fieldErrors, $settingsPart = 'new', $request = array())
+    {
+        $fieldsReturn = array('fields' => array(), 'required' => array());
+
+        $ofields = explode(',', $settings[$settingsPart]['subscriber']['fields']);
+        $fields = array();
+        $requireds = array();
+        if (is_array($settings[$settingsPart]['subscriber']) && array_key_exists('required', $settings[$settingsPart]['subscriber']) && !empty($settings[$settingsPart]['subscriber']['required'])) {
+            $requireds = explode(',', $settings[$settingsPart]['subscriber']['required']);
+        }
+        $fieldsReturn['required'] = $requireds;
+        foreach ($ofields as $field) {
+            $fieldInfo = explode(':', $field);
+            $fields[$fieldInfo[0]]['property'] = $fieldInfo[0];
+            $fieldLabel = LocalizationUtility::translate('subscriber.property.' . GeneralUtility::camelCaseToLowerCaseUnderscored($fieldInfo[0]), 'openemm');
+            $fields[$fieldInfo[0]]['name'] = !empty($fieldLabel) ? $fieldLabel : $fieldInfo[0];
+
+            //Fieldtype
+            if (count($fieldInfo) > 1) {
+                $fields[$fieldInfo[0]]['type'] = $fieldInfo[1];
+            } else {
+                $fields[$fieldInfo[0]]['type'] = 'textfield';
+            }
+            if ($fieldInfo[1] == 'select' || $fieldInfo[1] == 'radio') {
+                $options = array();
+                //Gender
+                if ($fieldInfo[0] == 'gender') {
+                    //$options[0] = LocalizationUtility::translate('pleaceSelect', 'openemm');
+                    $options[0] = LocalizationUtility::translate('male', 'openemm');
+                    $options[1] = LocalizationUtility::translate('female', 'openemm');
+                }
+                //Title
+                if ($fieldInfo[0] == 'title') {
+                    $options[0] = LocalizationUtility::translate('pleaceSelect', 'openemm');
+                    for ($i = 1; $i < 50; $i++) {
+                        $selectName = LocalizationUtility::translate('subscriber.property.' . GeneralUtility::camelCaseToLowerCaseUnderscored($fieldInfo[0]) . '.' . $i, 'openemm');
+                        if ($selectName != NULL) {
+                            $options[$i] = $selectName;
+                        } else {
+                            break;
+                        }
+                    }
+                }
+                /** @var \SJBR\StaticInfoTables\Domain\Repository\CountryRepository $countryRepository */
+                if ($fieldInfo[0] == 'country' || $fieldInfo[0] == 'region' || $fieldInfo[0] == 'zone')
+                    $countryRepository = $this->objectManager->get('SJBR\\StaticInfoTables\\Domain\\Repository\\CountryRepository');
+
+                //Country
+                if ($fieldInfo[0] == 'country') {
+                    $options[0] = LocalizationUtility::translate('pleaceSelect', 'openemm');
+                    $countrys = $countryRepository->findAll();
+                    /** @var \Ideal\Openemm\Domain\Model\Country  $country */
+                    foreach ($countrys as $country) {
+                        $options[$country->getIsoCodeA3()] = $country->getShortNameLocal();
+                    }
+                    $fields[$fieldInfo[0]]['options'] = $options;
+                }
+                //Region-Zone
+                //$request['country'] = "ITA";
+                if ($fieldInfo[0] == 'region' || $fieldInfo[0] == 'zone') {
+                    $options[0] = LocalizationUtility::translate('pleaceSelect', 'openemm');
+                    if (count($request) > 0 && isset($request['country'])) {
+
+                        //$country = $countryRepository->findAllOrderedBy("isoCodeA3");
+
+                        $zoneRepository = $this->objectManager->get('Ideal\\Openemm\\Domain\\Repository\\CountryZoneRepository');
+                        $zones = $zoneRepository->findByIsoCodeA3($request['country']);
+                        /** @var \Ideal\Openemm\Domain\Model\CountryZone $zone */
+                        foreach ($zones as $zone) {
+                            //$options[$zone->getUid()] = $zone->getLocalName();
+                            $options[$zone->getIsoCode()] = $zone->getLocalName();
+                        }
+                    } else {
+                        //$options[0] = LocalizationUtility::translate('pleaceSelectContry', 'openemm');
+                    }
+                }
+                $fields[$fieldInfo[0]]['options'] = $options;
+            }
+
+            //required
+            if (in_array($fieldInfo[0], $requireds, true)) {
+                $fields[$fieldInfo[0]]['required'] = true;
+            } else {
+                $fields[$fieldInfo[0]]['required'] = false;
+            }
+
+            //errors
+            if (array_key_exists($fieldInfo[0], $fieldErrors)) {
+                $fields[$fieldInfo[0]]["hasError"] = $fieldErrors[$fieldInfo[0]]["hasError"];
+                if (array_key_exists('errorClassWrap', $settings[$settingsPart]['new'])) {
+                    $fields[$fieldInfo[0]]["errorClassWrap"] = ' ' . $settings[$settingsPart]['errorClassWrap'];
+                }
+                if (array_key_exists('errorClassInput', $settings[$settingsPart]['new'])) {
+                    $fields[$fieldInfo[0]]["errorClassInput"] = ' ' . $settings[$settingsPart]['errorClassInput'];
+                }
+            } else {
+                $fields[$fieldInfo[0]]["hasError"] = false;
+            }
+        }
+
+        //Selectable Lists
+        if($this->settings[$settingsPart]['mailinglists.selectable'])
+
+        $fieldsReturn['fields'] = $fields;
+        return $fieldsReturn;
+    }
+
+    /**
+     * Mapping Values to Field Array
+     *
+     * @param array $fields
+     * @param array $arguments
+     * @return array
+     */
+    public function mappingFields(array $fields, array $arguments)
+    {
+        //var_dump($fields);
+        if (array_key_exists('subscriber', $arguments)) {
+            /** @var \SJBR\StaticInfoTables\Domain\Repository\CountryRepository $countryRepository */
+            foreach ($fields as $name => $field) {
+                if(strpos($name, ":") > 0) {
+                    $name = GeneralUtility::trimExplode(":", $name)[0];
+                }
+                var_dump($arguments['subscriber'][$name]);
+                if (array_key_exists($name, $arguments['subscriber'])) {
+                    if ($name == 'country' || $name == 'region' || $name == 'zone')
+                        $countryRepository = $this->objectManager->get('Ideal\\Openemm\\Domain\\Repository\\CountryRepository');
+                    if ($name == 'country') {
+                        $country = $countryRepository->findByIsoCodeA3($arguments['subscriber'][$name])->getFirst();
+                        $fields[$name]['value'] = $country->getShortNameLocal();
+                    } elseif ($name == 'region' || $name == 'zone') {
+                        $zoneRepository = $this->objectManager->get('Ideal\\Openemm\\Domain\\Repository\\CountryZoneRepository');
+                        $zone = $zoneRepository->findByIsoCodeA3($arguments['subscriber']['country'])->getFirst();
+                        $fields[$name]['value'] = $zone->getLocalName();
+                    } elseif ($name == 'title') {
+                        $fields[$name]['value'] = LocalizationUtility::translate('fields.title.' . $arguments['subscriber'][$name], 'openemm');
+                    } elseif ($name == 'gender') {
+                        $gender = $arguments['subscriber'][$name] == 0 ? LocalizationUtility::translate('male', 'openemm') : LocalizationUtility::translate('female', 'openemm');
+                        $fields[$name]['value'] = $gender;
+                    } else {
+                        $fields[$name]['value'] = $arguments['subscriber'][$name];
+                    }
+                }
+            }
+        } else {
+            $fields['ERROR']['argument'] = $arguments;
+        }
+        return $fields;
+    }
 }

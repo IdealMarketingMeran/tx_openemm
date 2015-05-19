@@ -44,6 +44,31 @@
             <trans-unit id="taps.openemm">
                 <source>OpenEMM</source>
             </trans-unit>
+
+            <trans-unit id="flexform.default_mailinglists">
+                <source>Default Mailinglists</source>
+            </trans-unit>
+            <trans-unit id="flexform.selectable_mailinglists">
+                <source>Selectable Mailinglists</source>
+            </trans-unit>
+            <trans-unit id="flexform.fields">
+                <source>Fields</source>
+            </trans-unit>
+            <trans-unit id="flexform.required_fields">
+                <source>Required Fields</source>
+            </trans-unit>
+            <trans-unit id="flexform.success_site">
+                <source>Redirect after success</source>
+            </trans-unit>
+            <trans-unit id="flexform.new_subscriber">
+                <source>New Subscriber</source>
+            </trans-unit>
+            <trans-unit id="flexform.update_subscriber">
+                <source>Update Subscriber</source>
+            </trans-unit>
+            <trans-unit id="flexform.unsubscriber">
+                <source>Unsubscriber</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>

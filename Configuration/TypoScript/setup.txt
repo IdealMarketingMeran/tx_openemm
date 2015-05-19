@@ -74,10 +74,11 @@ module.tx_openemm {
 		storagePid = {$module.tx_openemm.persistence.storagePid}
 	}
 	view {
-		templateRootPath = {$module.tx_openemm.view.templateRootPath}
-		partialRootPath = {$module.tx_openemm.view.partialRootPath}
-		layoutRootPath = {$module.tx_openemm.view.layoutRootPath}
+		templateRootPaths.0 = {$module.tx_openemm.view.templateRootPath}
+		partialRootPaths.0 = {$module.tx_openemm.view.partialRootPath}
+		layoutRootPaths.0 = {$module.tx_openemm.view.layoutRootPath}
 	}
+    settings < plugin.tx_openemm.settings
 }
 
 page.includeJS {

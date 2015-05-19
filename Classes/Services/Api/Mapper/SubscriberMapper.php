@@ -42,6 +42,7 @@ abstract class SubscriberMapper
      */
     public static function MapFromSoap($subscriber)
     {
+        /** @var \Ideal\Openemm\Domain\Model\Emm\Subscriber $subscriberModel */
         $subscriberModel = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Ideal\\Openemm\\Domain\\Model\\Emm\\Subscriber');
         $subscriberModel->setCustomerID($subscriber->customerID);
 
@@ -49,7 +50,7 @@ abstract class SubscriberMapper
         foreach ($subscriber->parameters->item as $parameter) {
             $parameters[$parameter->key] = $parameter->value;
         }
-        $subscriberModel->parameters = $parameters;
+        $subscriberModel->setParameters($parameters);
         return $subscriberModel;
     }
 

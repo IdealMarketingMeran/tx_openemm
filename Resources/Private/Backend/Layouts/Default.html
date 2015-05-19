@@ -1,0 +1,36 @@
+<f:render section="header" />
+<f:be.container includeCsh="false">
+	<div class="typo3-fullDoc">
+		<div id="typo3-docheader">
+            <div class="typo3-docheader">
+                <div class="typo3-docheader-functions">
+                    <div class="left">
+                        <f:be.buttons.csh />
+                        <f:be.menus.actionMenu>
+                            <f:be.menus.actionMenuItem label="{f:translate(key: 'LLL:EXT:openemm/Resources/Private/Language/locallang_mod.xlf:module.mailingList')}" controller="Mailinglist" action="list" />
+                        </f:be.menus.actionMenu>
+                    </div>
+
+                    <div class="right">
+                        <f:be.pagePath />
+                        <f:be.pageInfo />
+                    </div>
+                </div>
+
+                <div class="typo3-docheader-buttons">
+                    <div class="left">
+                        <f:render section="iconButtons" />
+                    </div>
+                    <div class="right">
+                        <f:be.buttons.shortcut />
+                    </div>
+                </div>
+            </div>
+            <div id="typo3-docbody">
+                <div id="typo3-inner-docbody">
+                    <f:render section="content" />
+                </div>
+            </div>
+        </div>
+	</div>
+</f:be.container>

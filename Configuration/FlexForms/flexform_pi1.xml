@@ -15,15 +15,15 @@
                                 <type>select</type>
                                 <items>
                                     <numIndex index="0">
-                                        <numIndex index="0">New Subscriber</numIndex>
+                                        <numIndex index="0">LLL:EXT:openemm/Resources/Private/Language/locallang_db.xlf:flexform.new_subscriber</numIndex>
                                         <numIndex index="1">Subscriber->new;Subscriber->create;Subscriber->confirm;Subscriber->getZoneAjax;</numIndex>
                                     </numIndex>
                                     <numIndex index="1">
-                                        <numIndex index="0">Update Subscriber</numIndex>
+                                        <numIndex index="0">LLL:EXT:openemm/Resources/Private/Language/locallang_db.xlf:flexform.update_subscriber</numIndex>
                                         <numIndex index="1">Subscriber->update;</numIndex>
                                     </numIndex>
                                     <numIndex index="2">
-                                        <numIndex index="0">Unsubscribe</numIndex>
+                                        <numIndex index="0">LLL:EXT:openemm/Resources/Private/Language/locallang_db.xlf:flexform.unsubscriber</numIndex>
                                         <numIndex index="1">Subscriber->unsubscribe;</numIndex>
                                     </numIndex>
                                 </items>
@@ -36,14 +36,14 @@
         <new>
             <ROOT>
                 <TCEforms>
-                    <sheetTitle>New Subscriber</sheetTitle>
+                    <sheetTitle>LLL:EXT:openemm/Resources/Private/Language/locallang_db.xlf:flexform.new_subscriber</sheetTitle>
                     <displayCond><![CDATA[FIELD:main.switchableControllerActions:=:Subscriber->new;Subscriber->create;Subscriber->confirm;Subscriber->getZoneAjax;]]></displayCond>
                 </TCEforms>
                 <type>array</type>
                 <el>                    
-                    <settings.new.redirectPid>
+                    <settings.new.successPid>
                         <TCEforms>
-                            <label>Site after Success</label>
+                            <label>LLL:EXT:openemm/Resources/Private/Language/locallang_db.xlf:flexform.success_site</label>
                             <config>
                                 <type>group</type>
                                 <internal_type>db</internal_type>
@@ -59,13 +59,13 @@
                                 </wizards>
                             </config>
                         </TCEforms>
-                    </settings.new.redirectPid>
+                    </settings.new.successPid>
                     <settings.new.mailinglists.all>
                         <TCEforms>
-                            <label>Mailinglists</label>
+                            <label>LLL:EXT:openemm/Resources/Private/Language/locallang_db.xlf:flexform.default_mailinglists</label>
                             <config>
                                 <type>select</type>
-                                <itemsProcFunc>\Ideal\Openemm\Utility\FlexFormHelper->getMailinglists</itemsProcFunc>
+                                <itemsProcFunc>Ideal\Openemm\Utility\FlexFormHelper->getMailinglists</itemsProcFunc>
                                 <maxitems>99</maxitems>
                                 <size>6</size>
                             </config>
@@ -73,22 +73,21 @@
                     </settings.new.mailinglists.all>
                     <settings.new.mailinglists.selectable>
                         <TCEforms>
-                            <label>Mailinglists</label>
+                            <label>LLL:EXT:openemm/Resources/Private/Language/locallang_db.xlf:flexform.selectable_mailinglists</label>
                             <config>
                                 <type>select</type>
-                                <itemsProcFunc>\Ideal\Openemm\Utility\FlexFormHelper->getMailinglists</itemsProcFunc>
+                                <itemsProcFunc>Ideal\Openemm\Utility\FlexFormHelper->getMailinglists</itemsProcFunc>
                                 <maxitems>99</maxitems>
                                 <size>6</size>
                             </config>
                         </TCEforms>
                     </settings.new.mailinglists.selectable>
-                    
                     <settings.new.subscriber.fields>
                         <TCEforms>
-                            <label>Fields</label>
+                            <label>LLL:EXT:openemm/Resources/Private/Language/locallang_db.xlf:flexform.fields</label>
                             <config>
                                 <type>select</type>
-                                <itemsProcFunc>\Ideal\Openemm\Utility\FlexFormHelper->getSubscriberFields</itemsProcFunc>
+                                <itemsProcFunc>Ideal\Openemm\Utility\FlexFormHelper->getSubscriberFields</itemsProcFunc>
                                 <maxitems>99</maxitems>
                                 <size>6</size>
                             </config>
@@ -96,10 +95,10 @@
                     </settings.new.subscriber.fields>
                     <settings.new.subscriber.required>
                         <TCEforms>
-                            <label>Required Fields</label>
+                            <label>LLL:EXT:openemm/Resources/Private/Language/locallang_db.xlf:flexform.required_fields</label>
                             <config>
                                 <type>select</type>
-                                <itemsProcFunc>\Ideal\Openemm\Utility\FlexFormHelper->getSubscriberFields</itemsProcFunc>
+                                <itemsProcFunc>Ideal\Openemm\Utility\FlexFormHelper->getSubscriberFields</itemsProcFunc>
                                 <maxitems>99</maxitems>
                                 <size>6</size>
                             </config>

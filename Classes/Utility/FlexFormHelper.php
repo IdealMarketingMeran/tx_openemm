@@ -147,13 +147,14 @@ class FlexFormHelper
         );
         $defaultType = ":textfield:default";
         if (!isset($this->cache['SubscriberFields'])) {
+            /** @var \Ideal\Openemm\Domain\Model\Emm\Subscriber $subscriber */
             try {
                 $subscriber = $this->openEmmService->GetSubscriber(1);
             } catch (\SoapFault $ex) {
                 throw $ex;
             }
             $options = array();
-            foreach ($subscriber->parameters as $key => $value) {
+            foreach ($subscriber->getParameters() as $key => $value) {
                 if (in_array($key, $exclude)) {
                     continue;
                 }

@@ -4,7 +4,7 @@
         <f:flashMessages renderMode="div" />
     </div>
     <f:render partial="Alert" arguments="{alerts:alerts}" />
-    <f:debug>{debug}</f:debug>
+    <f:debug>{_all}</f:debug>
     <f:if condition="{step}">
         <f:switch expression="{step}">
             <f:case value="1">
@@ -13,26 +13,28 @@
                     <f:if condition="{fields}">
                         <f:then>
                             <f:for each="{fields}" as="field">
-                                <f:switch expression="{field.type}">
-                                    <f:case value="textfield">
-                                        <f:render partial="Fields/Textfield" arguments="{field:field}" />
-                                    </f:case>
-                                    <f:case value="textarea">
-                                        <f:render partial="Fields/Textarea" arguments="{field:field}" />
-                                    </f:case>
-                                    <f:case value="checkbox">
-                                        <f:render partial="Fields/Checkbox" arguments="{field:field}" />
-                                    </f:case>
-                                    <f:case value="select">
-                                        <f:render partial="Fields/Select" arguments="{field:field}" />
-                                    </f:case>
-                                    <f:case value="radio">
-                                        <f:render partial="Fields/Radio" arguments="{field:field}" />
-                                    </f:case>
-                                    <f:case default="true">
-                                        <f:render partial="Fields/Textfield" arguments="{field:field}" />
-                                    </f:case>
-                                </f:switch>
+                                <f:if condition="{field.type}">
+                                    <f:switch expression="{field.type}">
+                                        <f:case value="textfield">
+                                            <f:render partial="Fields/Textfield" arguments="{field:field}" />
+                                        </f:case>
+                                        <f:case value="textarea">
+                                            <f:render partial="Fields/Textarea" arguments="{field:field}" />
+                                        </f:case>
+                                        <f:case value="checkbox">
+                                            <f:render partial="Fields/Checkbox" arguments="{field:field}" />
+                                        </f:case>
+                                        <f:case value="select">
+                                            <f:render partial="Fields/Select" arguments="{field:field}" />
+                                        </f:case>
+                                        <f:case value="radio">
+                                            <f:render partial="Fields/Radio" arguments="{field:field}" />
+                                        </f:case>
+                                        <f:case default="true">
+                                            <f:render partial="Fields/Textfield" arguments="{field:field}" />
+                                        </f:case>
+                                    </f:switch>
+                                </f:if>
                             </f:for>
                         </f:then>
                         <f:else>

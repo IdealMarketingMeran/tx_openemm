@@ -63,7 +63,7 @@ class OpenEMMService
         }
         $this->settings = $settings;
         if (is_array($this->settings) && count($this->settings) > 0) {
-            $this->wsseSoapClient = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance("\\Ideal\\Openemm\\Services\\Api\\WsseSoapClient",
+            $this->wsseSoapClient = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance("Ideal\\Openemm\\Services\\Api\\WsseSoapClient",
                 $this->settings['webservice']['wsdl'],
                 $this->settings['webservice']['username'],
                 $this->settings['webservice']['password'],

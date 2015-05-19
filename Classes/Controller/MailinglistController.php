@@ -2,6 +2,8 @@
 
 namespace Ideal\Openemm\Controller;
 
+use \TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /***************************************************************
  *
  *  Copyright notice
@@ -27,8 +29,69 @@ namespace Ideal\Openemm\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
+/**
+ * Class MailinglistController
+ * @package Ideal\Openemm\Controller
+ */
 class MailinglistController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
+    /**
+     * OpenEMM Service
+     * @var \Ideal\Openemm\Services\OpenEMMService
+     */
+    private $openEmmService = null;
 
+    /**
+     * @throws \Exception
+     */
+    public function initializeAction()
+    {
+        $this->openEmmService = $this->objectManager->get("Ideal\\Openemm\\Services\\OpenEMMService");
+        try {
+            $this->openEmmService->Init($this->settings);
+        } catch (\Exception $ex) {
+            throw new \Exception("OpenEMMService->Init: " . $ex->getMessage());
+        }
+    }
+
+    public function listAction()
+    {
+        if ($this->openEmmService == null) {
+            $this->Init();
+        }
+        try {
+            $lists = $this->openEmmService->ListMailinglists();
+        } catch (\SoapFault $ex) {
+            /** @var $logger \TYPO3\CMS\Core\Log\Logger */
+            $logger = GeneralUtility::makeInstance('TYPO3\CMS\Core\Log\LogManager')->getLogger(__CLASS__);
+            $logger->error("SOAP Fault", array('Message' => $ex->getMessage(), 'Line' => $ex->getLine()));
+            throw $ex;
+        }
+        $assign = array();
+        $list = array();
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $listStorage */
+        $listStorage = GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Persistence\ObjectStorage');
+
+        foreach ($lists->item as $item) {
+            /** @var \Ideal\Openemm\Domain\Model\Emm\Mailinglist $mailinglist */
+            $mailinglist = GeneralUtility::makeInstance('Ideal\Openemm\Domain\Model\Emm\Mailinglist');
+            $mailinglist->setId($item->id);
+            $mailinglist->setShortname($item->shortname);
+            $mailinglist->setDescription($item->description);
+            $listStorage->attach($mailinglist);
+            $list[] = array(
+                'id' => $item->id,
+                'shortname' => $item->shortname,
+                'description' => $item->description,
+            );
+        }
+        $assign['itemsO'] = $listStorage;
+        $assign['items'] = $list;
+        $this->view->assignMultiple($assign);
+    }
+
+    public function newAction()
+    {
+
+    }
 }

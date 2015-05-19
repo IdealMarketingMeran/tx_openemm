@@ -9,6 +9,33 @@ if (!defined('TYPO3_MODE')) {
 	'OpenEMM Subscriber'
 );
 
+
+/*******************
+ * Backend
+ ******************/
+if (TYPO3_MODE === 'BE') {
+
+    /**
+     * Registers a Backend Module
+     */
+    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
+        'Ideal.' . $_EXTKEY,
+        'web',
+        'config',
+        '',
+        array(
+            'Mailinglist' => 'list, new, create, edit, update'
+        ),
+        array(
+            'access' => 'user,group',
+            'icon'   => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/' .
+                (\TYPO3\CMS\Core\Utility\GeneralUtility::compat_version('7.0') ? 'module.png' : 'module.gif'),
+            'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_mod.xlf',
+        )
+    );
+
+}
+
 $pluginSignature = str_replace('_','',$_EXTKEY) . '_pi1';
 $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue($pluginSignature, 'FILE:EXT:' . $_EXTKEY . '/Configuration/FlexForms/flexform_pi1.xml');
