@@ -1,0 +1,8 @@
+# cat=connection modules/enable/10; type=string; label=Path/URL to WSDL
+webserviceWsdl =
+# cat=conection modules/enable/20; type=string; label=Username
+webserviceUsername =
+# cat=connection modules/enable/30; type=string; label=Password
+webservicePassword =
+# cat=connection modules/enable/40; type=string; label=nonce
+webserviceNonce =

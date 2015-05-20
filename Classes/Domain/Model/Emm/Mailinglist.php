@@ -39,6 +39,7 @@ class Mailinglist
     /**
      * Short name of Mailinglist
      * @var string
+     * @validate NotEmpty
      */
     protected $shortname;
 

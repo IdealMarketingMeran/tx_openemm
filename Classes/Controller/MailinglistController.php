@@ -52,6 +52,15 @@ class MailinglistController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
         } catch (\Exception $ex) {
             throw new \Exception("OpenEMMService->Init: " . $ex->getMessage());
         }
+
+        if ($this->arguments->hasArgument('mailinglist')) {
+            var_dump("hasmailinglist");
+            $mailinglistConfiguration = $this->arguments->getArgument('mailinglist')->getPropertyMappingConfiguration();
+            $mailinglistConfiguration->allowAllProperties()->setTypeConverterOption('TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter', \TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED, true);
+
+            //->allowAllProperties()->forProperty('relation')->allowAllProperties()->setTypeConverterOption(  'TYPO3\\CMS\\Extbase\\Property\\TypeConverter\\PersistentObjectConverter',  PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED,  TRUE); 
+
+        }
     }
 
     public function listAction()
@@ -90,8 +99,21 @@ class MailinglistController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
         $this->view->assignMultiple($assign);
     }
 
-    public function newAction()
+    /**
+     * @param \Ideal\Openemm\Domain\Model\Emm\Mailinglist $mailinglist
+     */
+    public function newAction(\Ideal\Openemm\Domain\Model\Emm\Mailinglist $mailinglist = null)
     {
 
+        $this->view->assign('mailinglist', $mailinglist);
+    }
+
+    /**
+     * @param \Ideal\Openemm\Domain\Model\Emm\Mailinglist $mailinglist
+     * @return mixed
+     */
+    public function createAction(\Ideal\Openemm\Domain\Model\Emm\Mailinglist $mailinglist)
+    {
+        return json_encode($mailinglist);
     }
 }

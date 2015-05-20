@@ -70,7 +70,7 @@ class OpenEMMService
                 null,
                 $this->settings['webservice']['soapOption']);
         } else {
-            throw new \Exception(print_r($settings, true));
+            throw new \Exception(/*print_r($settings, true)*/);
         }
         return $this->settings;
     }

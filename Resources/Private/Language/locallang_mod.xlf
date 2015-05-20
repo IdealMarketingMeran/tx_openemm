@@ -10,9 +10,29 @@
 				<source>OpenEmm</source>
 			</trans-unit>
 
-
-            <trans-unit id="module.mailingList">
+            <trans-unit id="module.listMailinglistTitle">
+                <source>Mailinglist List</source>
+            </trans-unit>
+            <trans-unit id="module.newMailinglistTitle">
+                <source>New Mailinglist</source>
+            </trans-unit>
+            <trans-unit id="module.mailinglist">
                 <source>Mailinglist</source>
+            </trans-unit>
+            <trans-unit id="module.newMailinglist">
+                <source>New Mailinglist</source>
+            </trans-unit>
+            <trans-unit id="module.saveMailinglist">
+                <source>Save Mailinglist</source>
+            </trans-unit>
+            <trans-unit id="module.mailinglist.id">
+                <source>New Mailinglist</source>
+            </trans-unit>
+            <trans-unit id="module.mailinglist.shortname">
+                <source>Shortname</source>
+            </trans-unit>
+            <trans-unit id="module.mailinglist.description">
+                <source>Description</source>
             </trans-unit>
 		</body>
 	</file>
