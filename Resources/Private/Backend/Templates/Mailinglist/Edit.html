@@ -1,0 +1,72 @@
+{namespace o=Ideal\Openemm\ViewHelpers}
+<f:layout name="Default" />
+<f:section name="header">
+    <o:be.configuration/>
+</f:section>
+<f:section name="iconButtons">
+    <div class="left">
+        <div class="buttongroup">
+            <f:link.action action="list">
+                <span class="t3-icon fa fa-close"> </span>
+            </f:link.action>
+        </div>
+        <div class="buttongroup">
+            <span class="t3-icon t3-icon-actions t3-icon-actions-document t3-icon-document-save">
+                <input type="image" onclick="document.getElementById('new-mailinglist-form').submit()" class="c-inputButton" name="submit" src="clear.gif" title="{f:translate(key:'LLL:EXT:openemm/Resources/Private/Language/locallang_mod.xlf:module.saveMailinglist')}" value="{f:translate(key:'LLL:EXT:openemm/Resources/Private/Language/locallang_mod.xlf:module.saveMailinglist')}">
+            </span>
+        </div>
+    </div>
+    <div class="right">
+    </div>
+</f:section>
+<f:section name="content">
+    <h1><f:translate key="LLL:EXT:openemm/Resources/Private/Language/locallang_mod.xlf:module.newMailinglistTitle"/></h1>
+    <f:flashMessages renderMode="div" />
+    <f:form controller="Mailinglist" action="update" name="mailinglist" object="{mailinglist}" id="new-mailinglist-form">
+        <div class="typo3-TCEforms">
+            <div role="tabpanel">
+                <ul class="nav nav-tabs t3js-tabs" role="tablist" id="tabs-DTM-2b21a02679" data-store-last-tab="1">
+                    <li role="presentation" class="active">
+                        <a href="#tx_openemm-mailinglist-1" title="" aria-controls="tx_openemm-mailinglist-1" role="tab" data-toggle="tab">
+                            Allgemein
+                            <img name="DTM-2b21a02679-1-REQ" src="gfx/clear.gif" class="t3-TCEforms-reqTabImg" alt="">
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="tx_openemm-mailinglist-1">
+                        <fieldset class="form-section">
+                            <div class="form-group t3js-formengine-palette-field">
+                                <label class="t3js-formengine-label">
+                                    <abbr class="t3-help-teaser"><f:translate key="LLL:EXT:openemm/Resources/Private/Language/locallang_mod.xlf:module.mailinglist.shortname"/></abbr>
+                                </label>
+                                <div class="t3js-formengine-field-item ">
+                                    <div class="form-control-wrap">
+                                        <div class="form-control-clearable">
+                                            <f:form.textfield property="shortname" class="form-control t3js-clearable hasDefaultValue" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="form-section">
+                            <div class="form-group t3js-formengine-palette-field">
+                                <label class="t3js-formengine-label">
+                                    <abbr class="t3-help-teaser"><f:translate key="LLL:EXT:openemm/Resources/Private/Language/locallang_mod.xlf:module.mailinglist.description"/></abbr>
+                                </label>
+                                <div class="t3js-formengine-field-item ">
+                                    <div class="form-control-wrap">
+                                        <div class="form-control-clearable">
+                                            <f:form.textarea property="description" class="form-control t3js-formengine-textarea" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <f:form.hidden property="id" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </f:form>
+</f:section>

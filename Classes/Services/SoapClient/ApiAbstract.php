@@ -1,5 +1,5 @@
 <?php
-namespace Ideal\Api\OpenEMM;
+namespace Ideal\Openemm\Services\SoapClient;
 
 /* * *************************************************************
  *
@@ -29,7 +29,7 @@ namespace Ideal\Api\OpenEMM;
 abstract class ApiAbstract {
     
     /**
-     * @var \Ideal\Api\OpenEMM\WsseSoapClient
+     * @var \Ideal\Openemm\Services\SoapClient\WsseSoapClient
      * @inject
      */
     protected $client;

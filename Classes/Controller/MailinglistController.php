@@ -54,12 +54,8 @@ class MailinglistController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
         }
 
         if ($this->arguments->hasArgument('mailinglist')) {
-            var_dump("hasmailinglist");
             $mailinglistConfiguration = $this->arguments->getArgument('mailinglist')->getPropertyMappingConfiguration();
-            $mailinglistConfiguration->allowAllProperties()->setTypeConverterOption('TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter', \TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED, true);
-
-            //->allowAllProperties()->forProperty('relation')->allowAllProperties()->setTypeConverterOption(  'TYPO3\\CMS\\Extbase\\Property\\TypeConverter\\PersistentObjectConverter',  PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED,  TRUE); 
-
+            $mailinglistConfiguration->allowAllProperties()->setTypeConverterOption('TYPO3\CMS\Extbase\Property\TypeConverter\ObjectConverter', \TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED, true);
         }
     }
 
@@ -94,8 +90,7 @@ class MailinglistController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
                 'description' => $item->description,
             );
         }
-        $assign['itemsO'] = $listStorage;
-        $assign['items'] = $list;
+        $assign['items'] = $listStorage;
         $this->view->assignMultiple($assign);
     }
 
@@ -104,7 +99,6 @@ class MailinglistController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
      */
     public function newAction(\Ideal\Openemm\Domain\Model\Emm\Mailinglist $mailinglist = null)
     {
-
         $this->view->assign('mailinglist', $mailinglist);
     }
 
@@ -114,6 +108,57 @@ class MailinglistController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
      */
     public function createAction(\Ideal\Openemm\Domain\Model\Emm\Mailinglist $mailinglist)
     {
-        return json_encode($mailinglist);
+        try {
+            $this->openEmmService->AddMailinglist($mailinglist);
+        } catch(\SoapFault $sex) {
+            $this->addFlashMessage($sex->getMessage(), 'SOAP FAULT', \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
+        }
+        $this->redirect('list');
+    }
+
+    /**
+     * @param int $mailinglist
+     */
+    public function editAction($mailinglist)
+    {
+        try {
+            $getMailinglist = $this->openEmmService->GetMailinglist($mailinglist);
+            $this->view->assign('mailinglist', $getMailinglist);
+        } catch(\SoapFault $sex) {
+            $this->addFlashMessage($sex->getMessage(), 'SOAP FAULT', \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
+            $this->redirect('list');
+        }
+    }
+
+    /**
+     * @param \Ideal\Openemm\Domain\Model\Emm\Mailinglist $mailinglist
+     * @return mixed
+     */
+    public function updateAction(\Ideal\Openemm\Domain\Model\Emm\Mailinglist $mailinglist)
+    {
+        try {
+            $this->openEmmService->UpdateMailinglist($mailinglist);
+        } catch(\SoapFault $sex) {
+            $this->addFlashMessage($sex->getMessage(), 'SOAP FAULT', \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
+        }
+        $this->redirect('list');
+    }
+
+    /**
+     * @param int $mailinglist
+     * @return mixed
+     */
+    public function deleteAction($mailinglist)
+    {
+        $isDeleted = false;
+        try {
+            if(!$this->openEmmService->DeleteMailinglist($mailinglist)) {
+                $this->addFlashMessage('Cant deletet', 'No Deleted', \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
+            }
+        } catch(\SoapFault $sex) {
+            $this->addFlashMessage($sex->getMessage(), 'SOAP FAULT', \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
+        }
+
+        $this->redirect('list');
     }
 }

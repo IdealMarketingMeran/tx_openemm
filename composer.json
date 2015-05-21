@@ -17,6 +17,8 @@
     "typo3/cms-core": ">=6.2.10,<8.0"
   },
   "autoload": {
-    "classmap": ["Classes"]
+    "psr-4": {
+      "Ideal\\Openemm\\": "Classes"
+    }
   }
 }

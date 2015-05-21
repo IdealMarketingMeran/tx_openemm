@@ -24,7 +24,7 @@ if (TYPO3_MODE === 'BE') {
         'config',
         '',
         array(
-            'Mailinglist' => 'list, new, create, edit, update'
+            'Mailinglist' => 'list, new, create, edit, update, delete'
         ),
         array(
             'access' => 'user,group',

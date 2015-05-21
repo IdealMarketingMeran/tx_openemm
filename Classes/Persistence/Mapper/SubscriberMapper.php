@@ -1,6 +1,6 @@
 <?php
 
-namespace Ideal\Openemm\Services\Api\Mapper;
+namespace Ideal\Openemm\Persistence\Mapper;
 
     /***************************************************************
      *

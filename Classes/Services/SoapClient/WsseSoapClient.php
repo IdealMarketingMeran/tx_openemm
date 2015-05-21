@@ -1,8 +1,8 @@
 <?php
 
-namespace Ideal\Openemm\Services\Api;
+namespace Ideal\Openemm\Services\SoapClient;
 
-    /* * *************************************************************
+    /***************************************************************
      *
      *  Copyright notice
      *
@@ -27,7 +27,7 @@ namespace Ideal\Openemm\Services\Api;
      * Reserved.
      *
      * Contributor(s): AGNITAS AG.
-     * ****************************************************************************** */
+     ******************************************************************************* */
 
 /*
   SOAP client with WSSE support for use of EMM/OpenEMM Webservice API 2.0
@@ -303,5 +303,4 @@ class WsseSoapClient extends \SoapClient
 
         return $date . "T" . $time . "Z";
     }
-
 }
